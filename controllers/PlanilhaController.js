@@ -22,11 +22,11 @@ module.exports = class PlanilhaController {
         }
     }
 
-
     static async tratarPlanilha(planilhaPath) {
         const workbook = new excelJs.Workbook();
         await workbook.csv.readFile(planilhaPath);
 
+        const header = ['Disciplina;RESP_1;RESP_2;RESP_3;RESP_4;RESP_5;MEDIA;COD QUESTAO;TITULO;MEDIA GERAL;NUMERO PREENCHIMENTO']
         const planilhas = [];
         workbook.eachSheet((sheet, sheetId) => {
             sheet.eachRow((row, rowNumber) => {
@@ -45,6 +45,5 @@ module.exports = class PlanilhaController {
             const outputPath = `planilha_${disciplina[0]}.csv`;
             await planilhas[disciplina].csv.writeFile(outputPath);
         }
-
     }
 }
