@@ -5,6 +5,7 @@ const port = 3000;
 const app = express();
 
 const planilhaRoutes = require('./routes/planilhaRoutes');
+const homeRoutes = require('./routes/homeRoutes');
 
 app.engine('handlebars', exphbs.engine());
 app.set('view engine', 'handlebars');
@@ -13,9 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
-app.use('/', planilhaRoutes);
-//dar uma olhada na lib exceljs
-
+app.use('/', homeRoutes);
 
 //mover essa conexao para db/conn.js
 app.listen(port, () => {

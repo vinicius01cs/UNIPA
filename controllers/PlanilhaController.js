@@ -16,9 +16,8 @@ module.exports = class PlanilhaController {
         const planilhaPath = req.file.path;
 
         await PlanilhaController.tratarPlanilha(planilhaPath)
-            .then(() => {
+            .then((planilhas) => {
                 res.send('Planilha importada com sucesso.');
-                console.log();
             })
             .catch(err => {
                 res.send(`Erro ao importar planilha. ${err}`);
@@ -39,20 +38,23 @@ module.exports = class PlanilhaController {
                     sheet.eachRow((row, rowNumber) => {
                         const disciplina = row.getCell(1).value;
                         const valores = disciplina.split(';');
-                       // console.log(valores[0]);
                         if (!planilhas[valores[0]]) {
                             planilhas[valores[0]] = new excelJs.Workbook();
+                            planilhas[valores[0]].title = valores[0];
                             planilhas[valores[0]].addWorksheet(sheet.name);
                             planilhas[valores[0]].getWorksheet(sheet.name).addRow(header);
                         }
                         planilhas[valores[0]].getWorksheet(sheet.name).addRow(row.values);
                     })
                 });
+
                 for (const disciplina in planilhas) {
-                    const outputPath = `archives/${disciplina[0]}.csv`;
-                    await planilhas[disciplina].csv.writeFile(outputPath);
+                    if (planilhas[disciplina].title != 'disciplina') {
+                        const outputPath = `archives/${disciplina[0]}.csv`;
+                        await planilhas[disciplina].csv.writeFile(outputPath);
+                    }
                 }
-                resolve();
+                resolve(planilhas);
             } catch (err) {
                 reject(err); // Rejeite a Promise com o motivo do erro
             }
