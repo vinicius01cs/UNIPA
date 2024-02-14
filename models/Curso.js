@@ -1,8 +1,8 @@
 const {DataTypes} = require('sequelize');
 const db = require('../db/conn');
 
-const Gestor = db.define('Gestor', {
-    id:{
+const Curso = db.define('Curso', {
+    curso_id:{
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -11,14 +11,14 @@ const Gestor = db.define('Gestor', {
         type: DataTypes.STRING, 
         required: true
     },
-    email:{
-        type: DataTypes.STRING, 
+    nome_gestor:{
+        type:DataTypes.STRING,
         required: true
     },
-    curso:{
+    email_gestor:{
         type: DataTypes.STRING, 
         required: true
-    },
+    }
 }, {
-    tableName: 'Gestor'
+    tableName: 'Curso'
 })

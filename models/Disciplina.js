@@ -2,23 +2,35 @@ const { DataTypes } = require('sequelize');
 const db = require('../db/conn');
 
 const Disciplina = db.define('Disciplina', {
-
-    gestor_id: {
+    disciplina_id:{
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    nome:{
+        type: DataTypes.STRING,
+        required: true
+    },
+    curso_id: {
         type: DataTypes.INTEGER,
         required: true,
         references: {
-            model: 'gestors',
-            key: 'id'
+            model: 'curso',
+            key: 'curso_id'
         }
     },
-    nome: {
+    nome_curso: {
         type: DataTypes.STRING,
         required: true
     },
-    curso: {
+    nome_professor: {
         type: DataTypes.STRING,
         required: true
     },
+    email_professor:{
+        type: DataTypes.STRING,
+        required: true
+    }
 }, {
     tableName: 'Disciplina'
 })

@@ -8,7 +8,7 @@ const conn = require('./db/conn');
 const planilhaRoutes = require('./routes/planilhaRoutes');
 const homeRoutes = require('./routes/homeRoutes');
 
-const Gestor = require('./models/Gestor');
+const Gestor = require('./models/Curso');
 const Disciplina = require('./models/Disciplina');
 
 app.engine('handlebars', exphbs.engine());
