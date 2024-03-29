@@ -1,9 +1,26 @@
 <form class="form" method="POST" action="/importar" enctype="multipart/form-data">
     <div class="form-control">
-        <label>Selecione a planilha:</label>
-
-        <input type="file" id="inputPlanilha" name="planilha" accept=".csv">
-
-        <input type="submit" value="Enviar">
+        <h3>Importar Planilha de CPA</h3>
+        <div class="div_input_file">
+            <span>Selecione a planilha: </span>
+            <label for="inputPlanilha" class="label_input_file">Buscar</label>
+            <input type="file" id="inputPlanilha" name="planilha" accept=".csv" class="button"
+                onchange="displayFileName()">
+        </div>
+        <label id="labelPlanilha" class="label_planilha_nome"></label>
+        <br>
+        <input type="submit" value="Enviar" class="button_submit">
     </div>
 </form>
+
+<script>
+    function displayFileName() {
+        const input = document.getElementById('inputPlanilha');
+        const label = document.getElementById('labelPlanilha');
+        if (input.files && input.files.length > 0) {
+            label.textContent = input.files[0].name;
+        } else {
+            label.textContent = 'Selecione a planilha:';
+        }
+    }
+</script>

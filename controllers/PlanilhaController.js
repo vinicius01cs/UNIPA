@@ -1,7 +1,6 @@
 const excelJs = require('exceljs');
 const fs = require('fs');
 const JSZip = require('jszip');
-const sheetJs = require('xlsx');
 module.exports = class PlanilhaController {
 
     static index(req, res) {
@@ -40,7 +39,7 @@ module.exports = class PlanilhaController {
                         const valores = disciplina.split(';');
                         if (!planilhas[valores[0]]) {
                             planilhas[valores[0]] = new excelJs.Workbook();
-                            planilhas[valores[0]].title = valores[0];
+                            planilhas[valores[0]].title = valores[0]; // verificar necessidade disso depois
                             planilhas[valores[0]].addWorksheet(sheet.name);
                             planilhas[valores[0]].getWorksheet(sheet.name).addRow(header);
                         }
