@@ -22,5 +22,5 @@ app.use('/', homeRoutes);
 
 conn
     .sync()
-    .then(() => { app.listen(3000) })
+    .then(() => { app.listen(port) })
     .catch((err) => { console.log(err) });

@@ -34,3 +34,5 @@ const Disciplina = db.define('Disciplina', {
 }, {
     tableName: 'Disciplina'
 })
+
+module.exports = Disciplina;
