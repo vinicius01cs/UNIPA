@@ -21,6 +21,7 @@ app.use(express.static('public'));
 
 app.use('/enviar-email', enviarEmailRouter);
 
+app.use('/planilha', planilhaRoutes);
 app.use('/', homeRoutes);
 
 conn

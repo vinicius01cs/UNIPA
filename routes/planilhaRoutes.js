@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.get('/planilha', planilhaController.index);
+router.get('/importarPlanilha', planilhaController.index);
 
 router.post('/importar', upload.single('planilha'), planilhaController.importar);
 
