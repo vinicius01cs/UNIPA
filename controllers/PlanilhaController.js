@@ -1,9 +1,11 @@
 const excelJs = require('exceljs');
 const fs = require('fs');
 const JSZip = require('jszip');
-const nodemailer = require('nodemailer');
 const Disciplina = require('../models/Disciplina');
 const Curso = require('../models/Curso');
+const axios = require('axios');
+
+
 require('dotenv').config()
 module.exports = class PlanilhaController {
 
@@ -12,23 +14,18 @@ module.exports = class PlanilhaController {
     }
 
     static async enviarEmail(emailDestino, arquivo) {
-        const transporter = nodemailer.createTransport({
-            host: process.env.HOST_SMTP,
-            port: process.env.PORT_SMTP,
-            auth: {
-                user: process.env.EMAIL_ADDRESS,
-                pass: process.env.EMAIL_PASSWORD
-            }
-        });
-
-        transporter.sendMail({
-            from: process.env.EMAIL_ADDRESS,
-            to: emailDestino,
-            subject: 'Planilha da CPA',
-            text: 'Teste de envio de email',
-
-        })
+        try {
+            const response = await axios.post(process.env.API_BASE_URL + 'enviar-email', {
+                emailDestino: emailDestino,
+                assunto: 'Nova avaliação de CPA disponivel',
+                texto: 'Uma nova avaliação de CPA está disponivel !'
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
+
     static async importar(req, res) {
 
         if (!req.file) {
@@ -42,8 +39,9 @@ module.exports = class PlanilhaController {
                 const emailDisciplina = await PlanilhaController.getEmailGestor(disciplina);
                 console.log(emailDisciplina); 
                 if (emailDisciplina) {
-                    await PlanilhaController.enviarEmail(emailDisciplina.email_professor, '?');
+                await PlanilhaController.enviarEmail(emailDisciplina, '?');
                 }
+            
             }
             res.send('E-mails enviados com sucesso.');
         } catch (error) {
@@ -88,7 +86,7 @@ module.exports = class PlanilhaController {
             attributes: ['email_professor']
         });
     }
-    static async getEmailGestor(nomeDisciplina){
+    static async getEmailGestor(nomeDisciplina) {
         return Curso.findOne({
             where: { nome: nomeDisciplina },
             attributes: ['email_gestor']
