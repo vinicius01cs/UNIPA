@@ -1,10 +1,29 @@
 const excelJs = require('exceljs');
 const fs = require('fs');
 const JSZip = require('jszip');
+const Disciplina = require('../models/Disciplina');
+const Curso = require('../models/Curso');
+const axios = require('axios');
+
+
+require('dotenv').config()
 module.exports = class PlanilhaController {
 
     static index(req, res) {
         res.render('planilha/index');
+    }
+
+    static async enviarEmail(emailDestino, arquivo) {
+        try {
+            const response = await axios.post(process.env.API_BASE_URL + 'enviar-email', {
+                emailDestino: emailDestino,
+                assunto: 'Nova avaliação de CPA disponivel',
+                texto: 'Uma nova avaliação de CPA está disponivel !'
+            });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async importar(req, res) {
@@ -14,49 +33,63 @@ module.exports = class PlanilhaController {
         }
         const planilhaPath = req.file.path;
 
-        await PlanilhaController.tratarPlanilha(planilhaPath)
-            .then((planilhas) => {
-                res.send('Planilha importada com sucesso.');
-            })
-            .catch(err => {
-                res.send(`Erro ao importar planilha. ${err}`);
-                console.log(err);
-            });
-
+        try {
+            const planilhas = await PlanilhaController.tratarPlanilha(planilhaPath);
+            for (const disciplina of planilhas) {
+                const emailDisciplina = await PlanilhaController.getEmailGestor(disciplina);
+                console.log(emailDisciplina); 
+                if (emailDisciplina) {
+                await PlanilhaController.enviarEmail(emailDisciplina, '?');
+                }
+            
+            }
+            res.send('E-mails enviados com sucesso.');
+        } catch (error) {
+            res.send(`Erro ao importar planilha e enviar e-mails. ${error}`);
+            console.log(error);
+        }
     }
 
     static async tratarPlanilha(planilhaPath) {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const workbook = new excelJs.Workbook();
-                await workbook.csv.readFile(planilhaPath);
-
-                const header = ['Disciplina;RESP_1;RESP_2;RESP_3;RESP_4;RESP_5;MEDIA;COD QUESTAO;TITULO;MEDIA GERAL;NUMERO PREENCHIMENTO']
-                const planilhas = [];
-                workbook.eachSheet((sheet, sheetId) => {
-                    sheet.eachRow((row, rowNumber) => {
-                        const disciplina = row.getCell(1).value;
-                        const valores = disciplina.split(';');
-                        if (!planilhas[valores[0]]) {
-                            planilhas[valores[0]] = new excelJs.Workbook();
-                            planilhas[valores[0]].title = valores[0]; // verificar necessidade disso depois
-                            planilhas[valores[0]].addWorksheet(sheet.name);
-                            planilhas[valores[0]].getWorksheet(sheet.name).addRow(header);
-                        }
-                        planilhas[valores[0]].getWorksheet(sheet.name).addRow(row.values);
-                    })
-                });
-
-                for (const disciplina in planilhas) {
-                    if (planilhas[disciplina].title != 'disciplina') {
-                        const outputPath = `archives/${disciplina[0]}.csv`;
-                        await planilhas[disciplina].csv.writeFile(outputPath);
-                    }
+        const workbook = new excelJs.Workbook();
+        await workbook.csv.readFile(planilhaPath);
+        const disciplinas = [];
+        const header = ['Disciplina;RESP_1;RESP_2;RESP_3;RESP_4;RESP_5;MEDIA;COD QUESTAO;TITULO;MEDIA GERAL;NUMERO PREENCHIMENTO']
+        const planilhas = [];
+        workbook.eachSheet((sheet, sheetId) => {
+            sheet.eachRow((row, rowNumber) => {
+                const disciplina = row.getCell(1).value;
+                const valores = disciplina.split(';');
+                if (!planilhas[valores[0]]) {
+                    planilhas[valores[0]] = new excelJs.Workbook();
+                    planilhas[valores[0]].title = valores[0]; // verificar necessidade disso depois
+                    planilhas[valores[0]].addWorksheet(sheet.name);
+                    planilhas[valores[0]].getWorksheet(sheet.name).addRow(header);
                 }
-                resolve(planilhas);
-            } catch (err) {
-                reject(err); // Rejeite a Promise com o motivo do erro
+                planilhas[valores[0]].getWorksheet(sheet.name).addRow(row.values);
+            })
+        });
+
+        for (const disciplina in planilhas) {
+            if (planilhas[disciplina].title != 'disciplina') {
+                disciplinas.push(planilhas[disciplina].title);
+                const outputPath = `archives/${disciplina[0]}.csv`;
+                await planilhas[disciplina].csv.writeFile(outputPath);
             }
+        }
+        return disciplinas;
+    };
+
+    static async getEmailDisciplina(nomeDisciplina) {
+        return Disciplina.findOne({
+            where: { nome: nomeDisciplina },
+            attributes: ['email_professor']
+        });
+    }
+    static async getEmailGestor(nomeDisciplina) {
+        return Curso.findOne({
+            where: { nome: nomeDisciplina },
+            attributes: ['email_gestor']
         });
     }
 }

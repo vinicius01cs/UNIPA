@@ -22,3 +22,5 @@ const Curso = db.define('Curso', {
 }, {
     tableName: 'Curso'
 })
+
+module.exports = Curso;
