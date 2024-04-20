@@ -17,6 +17,6 @@ const upload = multer({ storage: storage });
 
 router.get('/importarPlanilha', planilhaController.index);
 
-router.post('/importar', upload.single('planilha'), planilhaController.importar);
+router.post('/enviarPlanilha', upload.single('planilha'), planilhaController.importar);
 
 module.exports = router;
