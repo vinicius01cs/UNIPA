@@ -15,7 +15,7 @@ const Disciplina = db.define('Disciplina', {
         type: DataTypes.INTEGER,
         required: true,
         references: {
-            model: 'curso',
+            model: 'Curso',
             key: 'curso_id'
         }
     },

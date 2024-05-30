@@ -1,0 +1,92 @@
+<div class="container text-center customForm">
+    <form method="POST" action="/questionario/editarQuestionario/{{questionario.questionario_id}}">
+        <input type="hidden" name="id" value="{{questionario.questionario_id}}">
+        <!-- Hidden input to send the questionario_id to the server -->
+        <div class="form-group mx-auto">
+            <h3>Editar Questionário</h3>
+            <div class="form-row justify-content-center mt-5">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="nomeQuestionario">Nome do Questionario</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="nomeQuestionario" name="nomeQuestionario" class="form-control"
+                        value="{{questionario.nome}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="pergunta01">Pergunta 01</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="pergunta01" name="pergunta01" class="form-control"
+                        value="{{questionario.pergunta_01}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2 ">
+                    <label for="pergunta02">Pergunta 02</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="pergunta02" name="pergunta02" class="form-control"
+                        value="{{questionario.pergunta_02}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="pergunta03">Pergunta 03</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="pergunta03" name="pergunta03" class="form-control"
+                        value="{{questionario.pergunta_03}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="pergunta04">Pergunta 04</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="pergunta04" name="pergunta04" class="form-control"
+                        value="{{questionario.pergunta_04}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="pergunta05">Pergunta 05</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="pergunta05" name="pergunta05" class="form-control"
+                        value="{{questionario.pergunta_05}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="pergunta06">Pergunta 06</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="pergunta06" name="pergunta06" class="form-control"
+                        value="{{questionario.pergunta_06}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="pergunta07">Pergunta 07</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="pergunta07" name="pergunta07" class="form-control"
+                        value="{{questionario.pergunta_07}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="pergunta08">Pergunta 08</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="pergunta08" name="pergunta08" class="form-control"
+                        value="{{questionario.pergunta_08}}" required>
+                </div>
+            </div>
+            <br>
+            <input type="submit" value="Editar" class="btn btn-primary">
+        </div>
+    </form>
+</div>

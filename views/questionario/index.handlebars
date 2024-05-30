@@ -1,0 +1,38 @@
+<div class="container text-center">
+    <table class="table">
+        <thread>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Pergunta 1</th>
+                <th scope="col">Pergunta 2</th>
+                <th scope="col">Pergunta 3</th>
+                <th scope="col">Pergunta 4</th>
+                <th scope="col">Pergunta 5</th>
+                <th scope="col">Pergunta 6</th>
+                <th scope="col">Pergunta 7</th>
+                <th scope="col">Pergunta 8</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Excluir</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{#each questionarios}}
+            <tr>
+                <td>{{this.questionario_id}}</td>
+                <td>{{this.nome}}</td>
+                <td>{{this.pergunta_01}}</td>
+                <td>{{this.pergunta_02}}</td>
+                <td>{{this.pergunta_03}}</td>
+                <td>{{this.pergunta_04}}</td>
+                <td>{{this.pergunta_05}}</td>
+                <td>{{this.pergunta_06}}</td>
+                <td>{{this.pergunta_07}}</td>
+                <td>{{this.pergunta_08}}</td>
+                <td><a href="/questionario/editarQuestionario/{{this.questionario_id}}" class="btn btn-primary btn-sm active">Editar</a></td>
+                <td><a href="/questionario/DeletarQuestionario/{{this.questionario_id}}" class="btn btn-primary btn-sm active">Excluir</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
