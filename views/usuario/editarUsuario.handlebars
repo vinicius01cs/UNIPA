@@ -1,0 +1,92 @@
+<div class="container text-center customForm">
+    <form method="POST" action="/usuario/editarUsuario/{{usuario.usuario_id}}">
+        <input type="hidden" name="id" value="{{usuario.usuario_id}}">
+
+        <div class="form-group mx-auto">
+            <h3>Editar Usuário</h3>
+            <div class="form-row justify-content-center mt-4">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="nomeUsuario">Nome: </label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="nomeUsuario" name="nomeUsuario" class="form-control" value="{{usuario.nome}}"
+                        required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-4">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="sobrenomeUsuario">Sobrenome: </label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="sobrenomeUsuario" name="sobrenomeUsuario" class="form-control"
+                        value="{{usuario.sobrenome}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-4">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="matriculaUsuario">Matricula: </label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="matriculaUsuario" name="matriculaUsuario" class="form-control"
+                        value="{{usuario.usuarioMatricula}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-4">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="emailUsuario">Email: </label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="emailUsuario" name="emailUsuario" class="form-control"
+                        value="{{usuario.email}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-4">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="senhaQuestionario">Alterar senha: </label>
+                </div>
+                <div class="col-md-6 input-group">
+                    <input type="password" id="senhaUsuario" name="senhaUsuario" class="form-control">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-secondary" id="btnMostrarSenha">
+                            <i class="fa fa-eye" id="toggleIcon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-4">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="tipoUsuario">Tipo de Usuário: </label>
+                </div>
+                <div class="col-md-6">
+                    <select id="tipoUsuario" name="tipoUsuario" class="form-control" value="{{usuario.tipoUsuario}}"
+                        required>
+                        <option value="1">Administrador</option>
+                        <option value="2">Professor</option>
+                        <option value="3">Coordenador</option>
+                        <option value="4">Aluno</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <input type="submit" value="Alterar" class="btn btn-primary">
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('btnMostrarSenha').addEventListener('click', function () {
+        var passwordField = document.getElementById('senhaUsuario');
+        var passwordFieldType = passwordField.getAttribute('type');
+        var toggleIcon = document.getElementById('toggleIcon');
+
+        if (passwordFieldType === 'password') {
+            passwordField.setAttribute('type', 'text');
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.setAttribute('type', 'password');
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    });
+</script>

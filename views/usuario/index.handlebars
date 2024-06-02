@@ -1,0 +1,30 @@
+<div class="container text-center">
+    <table class="table">
+        <thread>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Sobrenome</th>
+                <th scope="col">Email</th>
+                <th scope="col">Matricula</th>
+                <th scope="col">Tipo de Usuário</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Excluir</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{#each usuarios}}
+            <tr>
+                <td>{{this.usuario_id}}</td>
+                <td>{{this.nome}}</td>
+                <td>{{this.sobrenome}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.usuarioMatricula}}</td>
+                <td>{{this.tipoUsuario}}</td>
+                <td><a href="/usuario/editarUsuario/{{this.usuario_id}}" class="btn btn-primary btn-sm active">Editar</a></td>
+                <td><a href="/usuario/deletarUsuario/{{this.usuario_id}}" class="btn btn-primary btn-sm active">Excluir</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
