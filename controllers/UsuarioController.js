@@ -12,11 +12,18 @@ module.exports = class UsuarioController {
     static async confirmarCadastroUsuario(req, res) {
         try {
             const { matriculaUsuario, emailUsuario, senhaUsuario, tipoUsuario, nomeUsuario, sobrenomeUsuario } = req.body;
-            const hashedPassword = await bcrypt.hash(senhaUsuario, 10);
+            
+            const usuario = new Usuario({
+                usuarioMatricula: matriculaUsuario, email: emailUsuario, tipoUsuario: tipoUsuario, nome: nomeUsuario, sobrenome: sobrenomeUsuario
+            });
 
+            await usuario.setPassword(senhaUsuario);
+            await usuario.save();
+            /*
             await Usuario.create({
                 usuarioMatricula: matriculaUsuario, email: emailUsuario, senha: hashedPassword, tipoUsuario: tipoUsuario, nome: nomeUsuario, sobrenome: sobrenomeUsuario
             });
+            */
             res.redirect('/');
         } catch (error) {
             res.status(500).json({ message: 'Erro ao cadastrar usuario' });
