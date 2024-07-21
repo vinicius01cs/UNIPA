@@ -3,11 +3,29 @@ const exphbs = require('express-handlebars');
 const jsonwebtoken = require('jsonwebtoken');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const handlebars = require('handlebars');
 
 const port = 3000;
 
 const app = express();
 const conn = require('./db/conn');
+
+handlebars.registerHelper('checkUserLevel', function(userLevel, requiredLevel, options) {
+    if(userLevel === requiredLevel) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+})
+
+handlebars.registerHelper('checkUsuarioLogado', function(user, options){
+    if(user){
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+
+});
 
 const questionarioRoutes = require('./routes/questionarioRoutes');
 const planilhaRoutes = require('./routes/planilhaRoutes');

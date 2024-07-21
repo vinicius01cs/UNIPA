@@ -18,13 +18,10 @@ module.exports = class AuthController {
             }
 
             req.logIn(usuario, (err) =>{
-                console.log('caindo aqui')
                 if(err) return next(err);
-                
-                const token = jwt.sign({ id: usuario.usuario_id, email: usuario.email}, jwtSecret, {expiresIn: '1h'});
-
+                const token = jwt.sign({ id: usuario.usuario_id, email: usuario.email, tipoUsuario: usuario.tipoUsuario}, jwtSecret, {expiresIn: '1h'});
                 res.cookie('jwt', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
-                res.json({success: true, token});
+                res.redirect('../');
             });
         })(req, res, next);
     }

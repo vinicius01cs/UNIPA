@@ -5,16 +5,29 @@ function authMiddleware(req, res, next) {
     const token = req.cookies.jwt;
 
     if (!token) {
-        return res.status(401).json({ message: 'Acesso negado. Nenhum token fornecido.' });
+        return res.redirect('../auth/login');
     }
-
     try {
         const decoded = jwt.verify(token, jwtSecret);
         req.user = decoded;
+        res.locals.user = decoded;
         next();
     } catch (ex) {
-        res.status(400).json({ message: 'Token inválido.' });
+        return res.redirect('../auth/login');
     }
 }
 
-module.exports = authMiddleware;
+function checkUserLevel(tipoUsuario) {
+    return (req, res, next) => {
+        if (req.user.tipoUsuario !== tipoUsuario) {
+            return res.redirect('../auth/login');
+        } else {
+            next();
+        }
+    }
+}
+
+module.exports = {
+    authMiddleware,
+    checkUserLevel
+};

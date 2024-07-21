@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const auth = require('../routes/auth');
-const authMiddleware = require('../routes/middleware/authMiddleware');
+const {authMiddleware, checkUserLevel} = require('../routes/middleware/authMiddleware');
 const planilhaController = require('../controllers/PlanilhaController');
 
 const storage = multer.diskStorage({
@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.get('/importarPlanilha', authMiddleware, planilhaController.index);
+router.get('/importarPlanilha', authMiddleware, checkUserLevel(1) , planilhaController.index);
 
 router.post('/enviarPlanilha', upload.single('planilha'), planilhaController.importar);
 
