@@ -26,4 +26,8 @@ module.exports = class AuthController {
         })(req, res, next);
     }
     
+    static logout(req, res) {
+        res.clearCookie('jwt');
+        res.redirect('../auth/login');
+    }
 } 
