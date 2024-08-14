@@ -1,5 +1,7 @@
 const { raw } = require('mysql2');
 const Usuario = require('../models/Usuario');
+const Professor = require('../models/Professor');
+const Coordenador = require('../models/Coordenador');
 const bcrypt = require('bcrypt');
 
 require('dotenv').config()
@@ -12,20 +14,18 @@ module.exports = class UsuarioController {
     static async confirmarCadastroUsuario(req, res) {
         try {
             const { matriculaUsuario, emailUsuario, senhaUsuario, tipoUsuario, nomeUsuario, sobrenomeUsuario } = req.body;
-            
+
             const usuario = new Usuario({
                 usuarioMatricula: matriculaUsuario, email: emailUsuario, tipoUsuario: tipoUsuario, nome: nomeUsuario, sobrenome: sobrenomeUsuario
             });
-
             await usuario.setPassword(senhaUsuario);
             await usuario.save();
-            /*
-            await Usuario.create({
-                usuarioMatricula: matriculaUsuario, email: emailUsuario, senha: hashedPassword, tipoUsuario: tipoUsuario, nome: nomeUsuario, sobrenome: sobrenomeUsuario
-            });
-            */
+            
+            await UsuarioController.CadastrarFuncao(usuario);
             res.redirect('/');
         } catch (error) {
+            console.error(error.message);
+            console.error(error.stack);
             res.status(500).json({ message: 'Erro ao cadastrar usuario' });
         }
     }
@@ -82,6 +82,22 @@ module.exports = class UsuarioController {
             res.redirect('/');
         } catch (error) {
             res.status(500).json({ message: 'Erro ao deletar usuario' });
+        }
+    }
+
+    static async CadastrarFuncao(usuario) {
+        try {
+            const nome = `${usuario.nome} ${usuario.sobrenome}`;
+            
+            if(usuario.tipoUsuario == 2) {
+                await Professor.create({ nome: nome, email: usuario.email, usuario_id: usuario.usuario_id });
+            }
+            else if (usuario.tipoUsuario == 3) {
+                await Coordenador.create({ nome: usuario.nome, email: usuario.email, usuario_id: usuario.usuario_id });
+            }
+        }
+        catch (error) {
+            console.error(error);
         }
     }
 }

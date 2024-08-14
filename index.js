@@ -33,11 +33,14 @@ const homeRoutes = require('./routes/homeRoutes');
 const enviarEmailRouter = require('./routes/api/enviarEmailApi');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const authRoutes = require('./routes/authRoutes');
+const cursoRoutes = require('./routes/cursoRoutes');
 
 const Curso = require('./models/Curso');
 const Disciplina = require('./models/Disciplina');
 const Questionario = require('./models/Questionario');
 const Usuario = require('./models/Usuario');
+const Coordenador = require('./models/Coordenador');
+const Professor = require('./models/Professor');
 
 require('./config/passport');
 
@@ -60,6 +63,7 @@ app.use('/enviar-email', enviarEmailRouter);
 app.use('/planilha', planilhaRoutes);
 app.use('/questionario', questionarioRoutes)
 app.use('/usuario', usuarioRoutes);
+app.use('/curso', cursoRoutes);
 app.use('/auth', authRoutes);
 app.use('/', homeRoutes);
 

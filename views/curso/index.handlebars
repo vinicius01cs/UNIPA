@@ -1,0 +1,22 @@
+<div class="tab-container">
+    <table class="table">
+        <thread>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Excluir</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{#each cursos}}
+            <tr>
+                <td>{{this.curso_id}}</td>
+                <td>{{this.nome}}</td>
+                <td><a href="/curso/editarCurso/{{this.curso_id}}" class="btn btn-primary btn-sm active">Editar</a></td>
+                <td><a href="/curso/deletarCurso/{{this.curso_id}}" class="btn btn-primary btn-sm active">Excluir</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
