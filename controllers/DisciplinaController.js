@@ -10,8 +10,22 @@ module.exports = class DisciplinaController {
 
     static async Index(req, res) {
         try {
+            const professores = await Professor.findAll({ raw: true });
             const disciplinas = await Disciplina.findAll({ raw: true });
-            res.render('disciplina/index', { disciplinas });
+            
+            const professorMap = professores.reduce((map, professor) => {
+                map[professor.professor_id] = professor.nome;
+                return map;
+            }, {});
+
+            const disciplinaProfessor = disciplinas.map(disciplina => {
+                return {
+                    ...disciplina,
+                    professor_nome: professorMap[disciplina.professor_id]
+                };
+            });
+
+            res.render('disciplina/index', { disciplinas: disciplinaProfessor });
         } catch (error) {
             res.status(500).json({ message: 'Erro ao buscar as disciplinas' });
         }
@@ -37,7 +51,7 @@ module.exports = class DisciplinaController {
         try {
             const { nomeDisciplina, siglaDisciplina, professor, cursos } = req.body;
 
-            const disciplina = await Disciplina.create({ nome: nomeDisciplina, sigla: siglaDisciplina, professor_id: professor });
+            const disciplina = await Disciplina.create({ nome: nomeDisciplina, sigla_disciplina: siglaDisciplina, professor_id: professor });
 
             for (const curso of cursos) {
                 await DisciplinaCurso.create({ disciplina_id: disciplina.disciplina_id, curso_id: curso });
@@ -47,6 +61,25 @@ module.exports = class DisciplinaController {
         } catch (error) {
             console.error(error);
             json.status(500).json({ message: 'Error' });
+        }
+    }
+
+    //todo - corrigir erro que nao carrega cursos da disciplina
+    static async EditarDisciplina(req, res) { 
+        try { 
+            const { disciplina_id } = req.params; 
+            const disciplina = await Disciplina.findOne({ raw: true, where: { disciplina_id } }); 
+            const professores = await Professor.findAll({ 
+                attributes: ['professor_id', 'nome'], 
+                raw: true 
+            }); 
+            const cursos = await Curso.findAll({ 
+                attributes: ['curso_id', 'nome'], 
+                raw: true 
+            }); 
+            res.render('disciplina/editarDisciplina', { disciplina, professores, cursos, cursosDisciplina }); 
+        }catch (error) {
+            res.status(500).json({ message: 'Error' });
         }
     }
 

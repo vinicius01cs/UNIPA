@@ -14,9 +14,11 @@
             <tr>
                 <td>{{this.nome}}</td>
                 <td>{{this.sigla_disciplina}}</td>
-                <td>{{this.professor_id}}</td>
-                <td><a href="/disciplina/editarDisciplina/{{this.disciplina_id}}" class="btn btn-primary btn-sm active">Editar</a></td>
-                <td><a href="/disciplina/deletarDisciplina/{{this.disciplina_id}}" class="btn btn-primary btn-sm active">Excluir</a></td>
+                <td>{{this.professor_nome}}</td>
+                <td><a href="/disciplina/editarDisciplina/{{this.disciplina_id}}"
+                        class="btn btn-primary btn-sm active">Editar</a></td>
+                <td><a href="/disciplina/deletarDisciplina/{{this.disciplina_id}}"
+                        class="btn btn-primary btn-sm active">Excluir</a></td>
             </tr>
             {{/each}}
         </tbody>

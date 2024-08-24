@@ -8,6 +8,8 @@ router.get('/index', authMiddleware, checkUserLevel(1), disciplinaController.Ind
 router.get('/cadastrarDisciplina', authMiddleware, checkUserLevel(1), disciplinaController.CadastrarDisciplina);
 router.post('/cadastrarNovaDisciplina',  disciplinaController.CadastrarNovaDisciplina);
 
+router.get('/editarDisciplina/:disciplina_id', authMiddleware, checkUserLevel(1), disciplinaController.EditarDisciplina);
+
 router.get('/deletarDisciplina/:disciplina_id', authMiddleware, checkUserLevel(1), disciplinaController.DeletarDisciplina);
 
 module.exports = router;

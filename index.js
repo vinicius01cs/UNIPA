@@ -27,6 +27,10 @@ handlebars.registerHelper('checkUsuarioLogado', function (user, options) {
 
 });
 
+handlebars.registerHelper('eq', function(a,b){
+    return a === b;
+});
+
 const questionarioRoutes = require('./routes/questionarioRoutes');
 const planilhaRoutes = require('./routes/planilhaRoutes');
 const homeRoutes = require('./routes/homeRoutes');
