@@ -37,6 +37,7 @@ const cursoRoutes = require('./routes/cursoRoutes');
 const disciplinaRoutes = require('./routes/disciplinaRoutes');
 const alunoRoutes = require('./routes/alunoRoutes');
 
+const QuestionarioDisponilizado = require('./models/QuestionarioDisponibilizado');
 const Curso = require('./models/Curso');
 const Disciplina = require('./models/Disciplina');
 const Questionario = require('./models/Questionario');

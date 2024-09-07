@@ -14,4 +14,7 @@ router.post('/editarQuestionario/:id', questionarioController.AtualizarQuestiona
 
 router.get('/deletarQuestionario/:id', authMiddleware, checkUserLevel(1), questionarioController.DeletarQuestionario)
 
+router.get('/disponibilizarQuestionario', authMiddleware, checkUserLevel(1), questionarioController.DisponibilizarQuestionario);
+router.post('/disponibilizarQuestionario', authMiddleware, checkUserLevel(1), questionarioController.SalvarDisponibilizacao);
+
 module.exports = router;

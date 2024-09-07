@@ -1,6 +1,7 @@
 const { raw } = require('mysql2');
+const moment = require('moment');
 const Questionario = require('../models/Questionario');
-
+const QuestionarioDisponibilizado = require('../models/QuestionarioDisponibilizado');
 require('dotenv').config()
 
 module.exports = class QuestionarioController {
@@ -67,4 +68,25 @@ module.exports = class QuestionarioController {
         }
     }
 
+    static async DisponibilizarQuestionario(req, res){
+        try{
+            const questionarios = await Questionario.findAll({ raw: true });
+            res.render('questionario/disponibilizarQuestionario', { questionarios });
+        }catch(error){
+            res.status(500).json({ message: 'Erro ao disponibilizar questionario' });
+        }
+    }
+
+    static async SalvarDisponibilizacao(req, res){
+        try{
+            const { questionario, dataFim } = req.body;
+            console.log(questionario, dataFim);
+            const dataFormatada = moment(dataFim, 'YYYY-MM-DD').format('YYYY-MM-DD');
+            await QuestionarioDisponibilizado.create({ questionario_id: questionario, dataFim: dataFormatada, flagDisponivel: true });
+            res.redirect('/');
+        }catch(error){
+            console.log(error);
+            res.status(500).json({ message: error});
+        }
+    }
 }
