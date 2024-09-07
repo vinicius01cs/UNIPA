@@ -1,0 +1,36 @@
+<div class="container text-center customForm">
+    <form method="POST" action="/aluno/relacionarAlunoDisciplina/{{aluno.aluno_id}}">
+        <input type="hidden" name="aluno_id" value="{{aluno.aluno_id}}">
+        <div class="form-group mx-auto">
+            <h4>Selecione as disciplinas em que o aluno está matriculado</h4>
+            <div class="form-row justify-content-center mt-5">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="nomeAluno">Nome do Aluno</label>
+                </div>
+                <div class="col-md-6">
+                    <label>{{aluno.nome}}</label>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="matricula">Matricula do Aluno</label>
+                </div>
+                <div class="col-md-6">
+                    <label>{{aluno.matricula}}</label>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="disciplinas">Disciplinas</label>
+                </div>
+                <div class="col-md-6">
+                    <select name="disciplinas[]" id="disciplinas" class="form-control" multiple required>
+                        {{#each disciplinas}}
+                        <option value="{{this.disciplina_id}}">{{this.nome}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <input type="submit" value="Concluir Cadastro" class="btn btn-primary">
+        </div>
+</div>

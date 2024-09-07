@@ -46,7 +46,6 @@ module.exports = class CursoController {
 
     static async SalvarEdicaoCurso(req, res) {
         try {
-
             const { id, nomeCurso, centro, coordenador } = req.body;
             await Curso.update({ nome: nomeCurso, centro: centro, coordenador_id: coordenador }, { where: { curso_id: id } });
             res.redirect('/curso/index');

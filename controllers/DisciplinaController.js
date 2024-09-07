@@ -77,7 +77,7 @@ module.exports = class DisciplinaController {
                 attributes: ['curso_id', 'nome'], 
                 raw: true 
             }); 
-            res.render('disciplina/editarDisciplina', { disciplina, professores, cursos, cursosDisciplina }); 
+            res.render('disciplina/editarDisciplina', { disciplina, professores, cursos }); 
         }catch (error) {
             res.status(500).json({ message: 'Error' });
         }

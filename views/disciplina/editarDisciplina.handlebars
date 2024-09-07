@@ -1,13 +1,14 @@
 <div class="container text-center customForm">
-    <form method="POST" action="/disciplina/cadastrarNovaDisciplina">
+    <form method="POST" action="/disciplina/editarDisciplina/{{this.disciplina_id}}">
+        <input type="hidden" name="id" value="{{curso.curso_id}}">
         <div class="form-group mx-auto">
-            <h3>Cadastrar Nova Disciplina</h3>
+            <h3>Editar Disciplina</h3>
             <div class="form-row justify-content-center mt-5">
                 <div class="col-md-2 text-right mt-2">
                     <label for="nomeDisciplina">Nome da Disciplina</label>
                 </div>
                 <div class="col-md-6">
-                    <input type="text" id="nomeDisciplina" name="nomeDisciplina" class="form-control" required>
+                    <input type="text" id="nomeDisciplina" name="nomeDisciplina" class="form-control" value="{{disciplina.nome}}"required>
                 </div>
             </div>
             <div class="form-row justify-content-center mt-3">
@@ -15,7 +16,7 @@
                     <label for="sigla">Código da Disciplina</label>
                 </div>
                 <div class="col-md-6">
-                    <input type="text" id="siglaDisciplina" name="siglaDisciplina" class="form-control" required>
+                    <input type="text" id="siglaDisciplina" name="siglaDisciplina" class="form-control" value="{{disciplina.sigla_disciplina}}" required>
                 </div>
             </div>
             <div class="form-row justify-content-center mt-3">
@@ -32,7 +33,7 @@
             </div>
             <div class="form-row justify-content-center mt-3">
                 <div class="col-md-2 text-right mt-2">
-                    <label for="cursos">Selecione os cursos da qual a discplina pertence</label>
+                    <label for="departamento">Selecione os cursos da qual a discplina pertence</label>
                 </div>
                 <div class="col-md-6">
                     <select name="cursos[]" id="cursos" class="form-control" multiple required>

@@ -27,10 +27,6 @@ handlebars.registerHelper('checkUsuarioLogado', function (user, options) {
 
 });
 
-handlebars.registerHelper('eq', function(a,b){
-    return a === b;
-});
-
 const questionarioRoutes = require('./routes/questionarioRoutes');
 const planilhaRoutes = require('./routes/planilhaRoutes');
 const homeRoutes = require('./routes/homeRoutes');
@@ -39,6 +35,7 @@ const usuarioRoutes = require('./routes/usuarioRoutes');
 const authRoutes = require('./routes/authRoutes');
 const cursoRoutes = require('./routes/cursoRoutes');
 const disciplinaRoutes = require('./routes/disciplinaRoutes');
+const alunoRoutes = require('./routes/alunoRoutes');
 
 const Curso = require('./models/Curso');
 const Disciplina = require('./models/Disciplina');
@@ -47,6 +44,8 @@ const Usuario = require('./models/Usuario');
 const Coordenador = require('./models/Coordenador');
 const Professor = require('./models/Professor');
 const DisciplinaCurso = require('./models/DisciplinaCurso');
+const AlunoDisciplina = require('./models/AlunoDisciplina');
+const Aluno = require('./models/Aluno');
 
 require('./config/passport');
 
@@ -72,6 +71,7 @@ app.use('/usuario', usuarioRoutes);
 app.use('/curso', cursoRoutes);
 app.use('/auth', authRoutes);
 app.use('/disciplina', disciplinaRoutes);
+app.use('/aluno', alunoRoutes);
 app.use('/', homeRoutes);
 
 conn

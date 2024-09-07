@@ -1,0 +1,38 @@
+<div class="container text-center customForm">
+    <form method="POST" action="/aluno/editarAluno/{{aluno.aluno_id}}">
+        <input type="hidden" name="id" value="{{aluno.aluno_id}}">
+        <div class="form-group mx-auto">
+            <h3>Continuar cadastro do aluno</h3>
+            <div class="form-row justify-content-center mt-5">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="nomeAluno">Nome do Aluno</label>
+                </div>
+                <div class="col-md-6">
+                    <label>{{aluno.nome}}</label>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="matricula">Matricula do Aluno</label>
+                </div>
+                <div class="col-md-6">
+                    <label>{{aluno.matricula}}</label>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="departamento">Curso</label>
+                </div>
+                <div class="col-md-6">
+                    <select name="curso" id="curso" class="form-control" required>
+                        {{#each cursos}}
+                        <option value="{{this.curso_id}}">{{this.nome}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <input type="submit" value="Continuar para a seleção de disciplinas">
+            </div>
+        </div>
+</div>
