@@ -49,6 +49,29 @@ module.exports = class QuestionarioController {
         }
     }
 
+    static async IndexQuestionarioDisponivel(req, res){
+        try{
+
+            const questionariosDisponiveis = await QuestionarioDisponibilizado.findAll({ raw: true, where: { flagDisponivel: true } });
+
+            res.render('questionario/indexQuestionariosAtivos', { questionariosDisponiveis });
+
+        }catch(error){
+            console.log(error);
+            res.status(500).json({ message: error });
+        }
+    }
+
+    static async FinalizarQuestionario(req, res) {
+        try {
+            const id = req.params.id;
+            await QuestionarioDisponibilizado.update({ flagDisponivel: false }, { where: { id } });
+            res.redirect('/');
+        } catch (error) {
+            res.status(500).json({ message: 'Erro ao finalizar questionario' });
+        }
+    }
+
     static async ResponderQuestionario(req, res) {
         try {
             const questionario_id = req.params.id;

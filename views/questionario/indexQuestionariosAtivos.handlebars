@@ -1,0 +1,20 @@
+<div class="container text-center"></div>
+<table class="table">
+    <thread>
+        <tr>
+            <th scope="col">ID Operação</th>
+            <th scope="col">Data Fim</th>
+        </tr>
+    </thread>
+    <tbody>
+        {{#each questionariosDisponiveis}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.dataFim}}</td>
+            <td><a href="/questionario/finalizarQuestionario/{{this.id}}"
+                    class="btn btn-primary btn-sm active">Finalizar Pesquisa</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</div>
