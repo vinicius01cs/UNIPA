@@ -2,6 +2,9 @@ const { raw } = require('mysql2');
 const moment = require('moment');
 const Questionario = require('../models/Questionario');
 const QuestionarioDisponibilizado = require('../models/QuestionarioDisponibilizado');
+const AlunoDisciplina = require('../models/AlunoDisciplina');
+const QuestionarioAluno = require('../models/QuestionarioAluno');
+
 require('dotenv').config()
 
 module.exports = class QuestionarioController {
@@ -57,36 +60,43 @@ module.exports = class QuestionarioController {
         }
     }
 
-    static async DeletarQuestionario(req, res){
-        try{
+    static async DeletarQuestionario(req, res) {
+        try {
             const id = req.params.id;
 
             await Questionario.destroy({ where: { questionario_id: id } });
             res.redirect('/');
-        }catch(error){
+        } catch (error) {
             res.status(500).json({ message: 'Erro ao deletar questionario' });
         }
     }
 
-    static async DisponibilizarQuestionario(req, res){
-        try{
+    static async DisponibilizarQuestionario(req, res) {
+        try {
             const questionarios = await Questionario.findAll({ raw: true });
             res.render('questionario/disponibilizarQuestionario', { questionarios });
-        }catch(error){
+        } catch (error) {
             res.status(500).json({ message: 'Erro ao disponibilizar questionario' });
         }
     }
 
-    static async SalvarDisponibilizacao(req, res){
-        try{
+    static async SalvarDisponibilizacao(req, res) {
+        try {
             const { questionario, dataFim } = req.body;
-            console.log(questionario, dataFim);
-            const dataFormatada = moment(dataFim, 'YYYY-MM-DD').format('YYYY-MM-DD');
-            await QuestionarioDisponibilizado.create({ questionario_id: questionario, dataFim: dataFormatada, flagDisponivel: true });
+            const relacaoDisciplinas = await AlunoDisciplina.findAll({ raw: true });
+            console.log(relacaoDisciplinas);
+
+            const operacao = await QuestionarioDisponibilizado.create({ questionario_id: questionario, dataFim, flagDisponivel: true });
+            for (const relacao of relacaoDisciplinas) {
+                await QuestionarioAluno.create({
+                    questionario_id: questionario, aluno_id: relacao.aluno_id,
+                    disciplina_id: relacao.disciplina_id, operacao_id: operacao.id, flagRespondido: false
+                });
+            }
             res.redirect('/');
-        }catch(error){
+        } catch (error) {
             console.log(error);
-            res.status(500).json({ message: error});
+            res.status(500).json({ message: error });
         }
     }
 }
