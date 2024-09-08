@@ -1,0 +1,28 @@
+<div class="container text-center customForm">
+    <form method="POST" action="/questionario/disponibilizarQuestionario">
+        <div class="form-group mx-auto">
+            <h3>Disponibilizar Pesquisa</h3>
+            <div class="form-row justify-content-center mt-5">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="nomeQuestionario">Pesquisa</label>
+                </div>
+                <div class="col-md-6">
+                    <select name="questionario" class="form-control" required>
+                        {{#each questionarios}}
+                        <option value="{{this.questionario_id}}">{{this.nome}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="dataInicio">Data Fim</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="date" name="dataFim" class="form-control" required>
+                </div>
+            </div>
+        </div>
+        <input type="submit" value="Disponibilizar" class="btn btn-primary">
+    </form>
+</div>

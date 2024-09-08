@@ -1,0 +1,123 @@
+<div class="container text-center customForm">
+    <form method="POST" action="/questionario/responderQuestionario/{{questionario.questionario_id}}">
+        <input type="hidden" name="questionario_id" value="{{questionario.questionario_id}}">
+        <input type="hidden" name="disciplina_id" value="{{dadosCombinados.[0].disciplina.disciplina_id}}">
+        <input type="hidden" name="operacao_id" value="{{dadosCombinados.[0].questionarioAluno.operacao_id}}">
+        <div class="form-group mx-auto">
+            <h3>Responder Pesquisa - {{dadosCombinados.[0].disciplina.nome}}</h3>
+            <div class="form-row justify-content-center mt-5">
+                <div class="col-md-5">
+                    <label for="pergunta01" class="mb-2">{{questionario.pergunta_01}}</label>
+                    <select name="pergunta01" id="pergunta01" class="custom-select" style="display: block;"
+                        required="true">
+                        <option value="" selected></option>
+                        <option value="1">1 - Muito Ruim</option>
+                        <option value="2">2 - Ruim</option>
+                        <option value="3">3 - Regular</option>
+                        <option value="4">4 - Bom</option>
+                        <option value="5">5 - Muito Bom</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-5">
+                    <label for="pergunta02" class="mb-2">{{questionario.pergunta_02}}</label>
+                    <select name="pergunta02" id="pergunta02" class="custom-select" style="display: block;"
+                        required="true">
+                        <option value="" selected></option>
+                        <option value="1">1 - Muito Ruim</option>
+                        <option value="2">2 - Ruim</option>
+                        <option value="3">3 - Regular</option>
+                        <option value="4">4 - Bom</option>
+                        <option value="5">5 - Muito Bom</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-5">
+                    <label for="pergunta03" class="mb-2">{{questionario.pergunta_03}}</label>
+                    <select name="pergunta03" id="pergunta01" class="custom-select" style="display: block;"
+                        required="true">
+                        <option value="" selected></option>
+                        <option value="1">1 - Muito Ruim</option>
+                        <option value="2">2 - Ruim</option>
+                        <option value="3">3 - Regular</option>
+                        <option value="4">4 - Bom</option>
+                        <option value="5">5 - Muito Bom</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-5">
+                    <label for="pergunta04" class="mb-2">{{questionario.pergunta_04}}</label>
+                    <select name="pergunta04" id="pergunta04" class="custom-select" style="display: block;"
+                        required="true">
+                        <option value="" selected></option>
+                        <option value="1">1 - Muito Ruim</option>
+                        <option value="2">2 - Ruim</option>
+                        <option value="3">3 - Regular</option>
+                        <option value="4">4 - Bom</option>
+                        <option value="5">5 - Muito Bom</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-5">
+                    <label for="pergunta05" class="mb-2">{{questionario.pergunta_05}}</label>
+                    <select name="pergunta05" id="pergunta05" class="custom-select" style="display: block;"
+                        required="true">
+                        <option value="" selected></option>
+                        <option value="1">1 - Muito Ruim</option>
+                        <option value="2">2 - Ruim</option>
+                        <option value="3">3 - Regular</option>
+                        <option value="4">4 - Bom</option>
+                        <option value="5">5 - Muito Bom</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-5">
+                    <label for="pergunta06" class="mb-2">{{questionario.pergunta_06}}</label>
+                    <select name="pergunta06" id="pergunta06" class="custom-select" style="display: block;"
+                        required="true">
+                        <option value="" selected></option>
+                        <option value="1">1 - Muito Ruim</option>
+                        <option value="2">2 - Ruim</option>
+                        <option value="3">3 - Regular</option>
+                        <option value="4">4 - Bom</option>
+                        <option value="5">5 - Muito Bom</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-5">
+                    <label for="pergunta07" class="mb-2">{{questionario.pergunta_07}}</label>
+                    <select name="pergunta07" id="pergunta07" class="custom-select" style="display: block;"
+                        required="true">
+                        <option value="" selected></option>
+                        <option value="1">1 - Muito Ruim</option>
+                        <option value="2">2 - Ruim</option>
+                        <option value="3">3 - Regular</option>
+                        <option value="4">4 - Bom</option>
+                        <option value="5">5 - Muito Bom</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-5">
+                    <label for="pergunta08" class="mb-2">{{questionario.pergunta_08}}</label>
+                    <select name="pergunta08" id="pergunta08" class="custom-select" style="display: block;">
+                        <option value="" selected></option>
+                        <option value="1">1 - Muito Ruim</option>
+                        <option value="2">2 - Ruim</option>
+                        <option value="3">3 - Regular</option>
+                        <option value="4">4 - Bom</option>
+                        <option value="5">5 - Muito Bom</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <input type="submit" value="Enviar" class="btn btn-primary">
+        </div>
+    </form>
+</div>

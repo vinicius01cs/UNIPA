@@ -29,8 +29,9 @@
                         Pesquisa
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="/questionario/index">Visualizar Questionários</a>
-                        <a class="dropdown-item" href="/questionario/criarQuestionario">Criar Questionário</a>
+                        <a class="dropdown-item" href="/questionario/index">Visualizar Pesquisas</a>
+                        <a class="dropdown-item" href="/questionario/indexQuestionariosAtivos">Visualizar Pesquisas Ativas</a>
+                        <a class="dropdown-item" href="/questionario/criarQuestionario">Criar Pesquisa</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -41,6 +42,36 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="/usuario/cadastrarUsuario">Cadastrar Usuário</a>
                         <a class="dropdown-item" href="/usuario/index">Visualizar Usuários</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Cursos
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/curso/cadastrarCurso">Cadastrar Cursos</a>
+                        <a class="dropdown-item" href="/curso/index">Visualizar Cursos</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Disciplinas
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/disciplina/cadastrarDisciplina">Cadastrar Disciplina</a>
+                        <a class="dropdown-item" href="/disciplina/index">Visualizar Disciplinas</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Alunos
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/aluno/index">Visualizar Alunos</a>
+                    </div>
                 </li>
                 {{/checkUserLevel}}
                 <li class="nav-item">

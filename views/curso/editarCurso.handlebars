@@ -1,0 +1,39 @@
+<div class="container text-center customForm">
+    <form method="POST" action="/curso/editarCurso/{{curso.curso_id}}">
+        <input type="hidden" name="id" value="{{curso.curso_id}}">
+        <div class="form-group mx-auto">
+            <h3>Editar Curso</h3>
+            <div class="form-row justify-content-center mt-5">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="nomeCurso">Nome do Curso</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="nomeCurso" name="nomeCurso" class="form-control" value="{{curso.nome}}"
+                        required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="centro">Centro</label>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="centro" name="centro" class="form-control" value="{{curso.centro}}" required>
+                </div>
+            </div>
+            <div class="form-row justify-content-center mt-3">
+                <div class="col-md-2 text-right mt-2">
+                    <label for="departamento">Coordenador</label>
+                </div>
+                <div class="col-md-6">
+                    <select name="coordenador" id="coordenador" class="form-control" required>
+                        {{#each coordenadores}}
+                        <option value="{{this.coordenador_id}}">{{this.nome}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+            </div>
+            <br>
+            <input type="submit" value="Editar" class="btn btn-primary">
+        </div>
+    </form>
+</div>

@@ -1,0 +1,26 @@
+<div class="tab-container">
+    <table class="table">
+        <thread>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Sigla</th>
+                <th scope="col">Professor</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Excluir</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{#each disciplinas}}
+            <tr>
+                <td>{{this.nome}}</td>
+                <td>{{this.sigla_disciplina}}</td>
+                <td>{{this.professor_nome}}</td>
+                <td><a href="/disciplina/editarDisciplina/{{this.disciplina_id}}"
+                        class="btn btn-primary btn-sm active">Editar</a></td>
+                <td><a href="/disciplina/deletarDisciplina/{{this.disciplina_id}}"
+                        class="btn btn-primary btn-sm active">Excluir</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

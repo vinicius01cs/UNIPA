@@ -1,8 +1,8 @@
 const {DataTypes} = require('sequelize');
 const db = require('../db/conn');
 
-const Curso = db.define('Curso', {
-    curso_id:{
+const Coordenador = db.define('Coordenador', {
+    coordenador_id:{
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -11,20 +11,20 @@ const Curso = db.define('Curso', {
         type: DataTypes.STRING, 
         required: true
     },
-    centro:{
+    email:{
         type:DataTypes.STRING,
         required: true
     },
-    coordenador_id:{
+    usuario_id:{
         type:DataTypes.INTEGER,
         references: {
-            model: 'Coordenador',
-            key: 'coordenador_id'
+            model: 'Usuario',
+            key: 'usuario_id'
         },
         required: true
     }
 }, {
-    tableName: 'Curso'
+    tableName: 'Coordenador'
 })
 
-module.exports = Curso;
+module.exports = Coordenador;

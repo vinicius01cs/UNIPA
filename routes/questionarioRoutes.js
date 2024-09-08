@@ -3,7 +3,8 @@ const router = express.Router();
 const questionarioController = require('../controllers/QuestionarioController');
 const {authMiddleware, checkUserLevel} = require('../routes/middleware/authMiddleware');
 
-router.get('/index', questionarioController.Index)
+router.get('/index', authMiddleware, checkUserLevel(1), questionarioController.Index)
+router.get('/indexQuestionariosNaoRespondidos', authMiddleware, checkUserLevel(4), questionarioController.IndexAluno); 
 
 
 router.get('/criarQuestionario', authMiddleware, checkUserLevel(1), questionarioController.CriarQuestionario)
@@ -13,5 +14,11 @@ router.get('/editarQuestionario/:id', authMiddleware, checkUserLevel(1), questio
 router.post('/editarQuestionario/:id', questionarioController.AtualizarQuestionario)
 
 router.get('/deletarQuestionario/:id', authMiddleware, checkUserLevel(1), questionarioController.DeletarQuestionario)
+
+router.get('/disponibilizarQuestionario', authMiddleware, checkUserLevel(1), questionarioController.DisponibilizarQuestionario);
+router.post('/disponibilizarQuestionario', authMiddleware, checkUserLevel(1), questionarioController.SalvarDisponibilizacao);
+
+router.get('/responderQuestionario/:id', authMiddleware, checkUserLevel(4), questionarioController.ResponderQuestionario);
+router.post('/responderQuestionario/:id', authMiddleware, checkUserLevel(4), questionarioController.SalvarResposta);
 
 module.exports = router;

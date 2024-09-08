@@ -1,0 +1,28 @@
+<div class="tab-container">
+    <table class="table">
+        <thread>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Email</th>
+                <th scope="col">Matricula</th>
+                <th scope="col">Curso</th>
+                <th scope="col">Editar</th>
+                <th scope="col">Excluir</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{#each alunos}}
+            <tr>
+                <td>{{this.nome}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.matricula}}</td>
+                <td>{{this.curso_id}}</td>
+                <td><a href="/aluno/editarAluno/{{this.aluno_id}}"
+                        class="btn btn-primary btn-sm active">Editar</a></td>
+                <td><a href="/aluno/deletarAluno/{{this.aluno_id}}"
+                        class="btn btn-primary btn-sm active">Excluir</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
