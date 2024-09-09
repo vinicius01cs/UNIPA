@@ -75,6 +75,17 @@ module.exports = class QuestionarioController {
         }
     }
 
+    static async IndexQuestionarioFinalizado(req, res) {
+        try {
+            const questionariosFinalizados = await QuestionarioDisponibilizado.findAll({ raw: true, where: { flagDisponivel: false } });
+
+            res.render('questionario/indexQuestionariosInativos', { questionariosFinalizados });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: error });
+        }
+    }
+
     static async FinalizarQuestionario(req, res) {
         try {
             const id = req.params.id;

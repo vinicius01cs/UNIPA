@@ -5,6 +5,7 @@ const { authMiddleware, checkUserLevel } = require('../routes/middleware/authMid
 
 router.get('/index', authMiddleware, checkUserLevel(1), questionarioController.Index)
 router.get('/indexQuestionariosAtivos', authMiddleware, checkUserLevel(1), questionarioController.IndexQuestionarioDisponivel);
+router.get('/indexQuestionariosInativos', authMiddleware, checkUserLevel(1), questionarioController.IndexQuestionarioFinalizado);
 router.get('/indexQuestionariosNaoRespondidos', authMiddleware, checkUserLevel(4), questionarioController.IndexAluno);
 
 
