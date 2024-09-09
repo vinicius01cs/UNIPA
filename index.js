@@ -49,6 +49,8 @@ const DisciplinaCurso = require('./models/DisciplinaCurso');
 const AlunoDisciplina = require('./models/AlunoDisciplina');
 const Aluno = require('./models/Aluno');
 const Respostas = require('./models/Respostas');
+const RespostasCurso = require('./models/RespostasCurso');
+const QuestionarioCurso = require('./models/QuestionarioCurso');
 
 require('./config/passport');
 

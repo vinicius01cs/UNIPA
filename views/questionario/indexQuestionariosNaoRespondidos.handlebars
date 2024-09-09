@@ -1,18 +1,38 @@
 <div class="container text-center"></div>
-    <table class="table">
-        <thread>
-            <tr>
-                <th scope="col">Disciplina</th>
-                <th scope="col">Responder</th>
-            </tr>
-        </thread>
-        <tbody>
-            {{#each dadosCombinados}}
-            <tr>
-                <td>{{this.disciplina.nome}}</td>
-                <td><a href="/questionario/responderQuestionario/{{this.questionarioAluno.questionario_id}}" class="btn btn-primary btn-sm active">Responder</a></td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
+<table class="table">
+    <thread>
+        <tr>
+            <th scope="col">Disciplina</th>
+            <th scope="col">Responder</th>
+        </tr>
+    </thread>
+    <tbody>
+        {{#each dadosCombinados}}
+        <tr>
+            <td>{{this.disciplina.nome}}</td>
+            <td><a href="/questionario/responderQuestionario/{{this.questionarioAluno.questionario_id}}"
+                    class="btn btn-primary btn-sm active">Responder</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<table class="table">
+    <thread>
+        <tr>
+            <th scope="col">Curso</th>
+            <th scope="col">Responder</th>
+        </tr>
+    </thread>
+    <tbody>
+        {{#each dadosCombinadosCurso}}
+        <tr>
+            <td>{{this.curso.nome}}</td>
+            <td><a href="/questionario/responderQuestionarioCurso/{{this.questionarioCurso.questionario_id}}"
+                    class="btn btn-primary btn-sm active">Responder</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
 </div>

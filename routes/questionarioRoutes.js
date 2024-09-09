@@ -22,6 +22,9 @@ router.post('/disponibilizarQuestionario', authMiddleware, checkUserLevel(1), qu
 router.get('/responderQuestionario/:id', authMiddleware, checkUserLevel(4), questionarioController.ResponderQuestionario);
 router.post('/responderQuestionario/:id', authMiddleware, checkUserLevel(4), questionarioController.SalvarResposta);
 
+router.get('/responderQuestionarioCurso/:id', authMiddleware, checkUserLevel(4), questionarioController.ResponderQuestionarioCurso);
+router.post('/responderQuestionarioCurso/:id', authMiddleware, checkUserLevel(4), questionarioController.SalvarRespostaCurso);
+
 router.get('/finalizarQuestionario/:id', authMiddleware, checkUserLevel(1), questionarioController.FinalizarQuestionario);
 
 module.exports = router;

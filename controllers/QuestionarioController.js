@@ -4,9 +4,12 @@ const Questionario = require('../models/Questionario');
 const QuestionarioDisponibilizado = require('../models/QuestionarioDisponibilizado');
 const AlunoDisciplina = require('../models/AlunoDisciplina');
 const QuestionarioAluno = require('../models/QuestionarioAluno');
+const QuestionarioCurso = require('../models/QuestionarioCurso');
 const Aluno = require('../models/Aluno');
 const Disciplina = require('../models/Disciplina');
-const Respostas  = require('../models/Respostas');
+const Respostas = require('../models/Respostas');
+const RespostasCurso = require('../models/RespostasCurso');
+const Curso = require('../models/Curso');
 
 require('dotenv').config()
 
@@ -28,12 +31,11 @@ module.exports = class QuestionarioController {
         try {
             const user = req.user;
             const aluno = await Aluno.findOne({ raw: true, where: { aluno_id: user.id } });
+
             const questionarioAluno = await QuestionarioAluno.findAll({ raw: true, where: { aluno_id: aluno.aluno_id, flagRespondido: false } });
 
             const disciplinasId = questionarioAluno.map((questionario) => questionario.disciplina_id);
-
             const disciplina = await Disciplina.findAll({ raw: true, where: { disciplina_id: disciplinasId } });
-
             const dadosCombinados = disciplina.map(disciplina => {
                 const questionario = questionarioAluno.find(q => q.disciplina_id === disciplina.disciplina_id);
                 return {
@@ -41,22 +43,33 @@ module.exports = class QuestionarioController {
                     questionarioAluno: questionario
                 };
             });
+
+            const questionarioCurso = await QuestionarioCurso.findAll({ raw: true, where: { aluno_id: aluno.aluno_id, flagRespondido: false } });
+            const cursosId = questionarioCurso.map((questionario) => questionario.curso_id);
+            const curso = await Curso.findAll({ raw: true, where: { curso_id: cursosId } });
+            const dadosCombinadosCurso = curso.map(curso => {
+                const questionarioCursos = questionarioCurso.find(q => q.curso_id === curso.curso_id);
+                return {
+                    curso,
+                    questionarioCurso: questionarioCursos
+                }
+            })
+
             req.session.dadosCombinados = dadosCombinados;
-            res.render('questionario/indexQuestionariosNaoRespondidos', { dadosCombinados });
+            req.session.dadosCombinadosCurso = dadosCombinadosCurso;
+            res.render('questionario/indexQuestionariosNaoRespondidos', { dadosCombinados, dadosCombinadosCurso });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: error });
         }
     }
 
-    static async IndexQuestionarioDisponivel(req, res){
-        try{
-
+    static async IndexQuestionarioDisponivel(req, res) {
+        try {
             const questionariosDisponiveis = await QuestionarioDisponibilizado.findAll({ raw: true, where: { flagDisponivel: true } });
 
             res.render('questionario/indexQuestionariosAtivos', { questionariosDisponiveis });
-
-        }catch(error){
+        } catch (error) {
             console.log(error);
             res.status(500).json({ message: error });
         }
@@ -84,28 +97,66 @@ module.exports = class QuestionarioController {
         }
     }
 
+    static async ResponderQuestionarioCurso(req, res) {
+        try {
+            const questionario_id = req.params.id;
+            const questionario = await Questionario.findOne({ raw: true, where: { questionario_id } });
+            const dadosCombinadosCurso = req.session.dadosCombinadosCurso;
+
+            console.log(dadosCombinadosCurso);
+            res.render('questionario/responderQuestionarioCurso', { questionario, dadosCombinadosCurso });
+        } catch (error) {
+            res.status(500).json({ message: error });
+        }
+    }
+
     static async SalvarResposta(req, res) {
-        try{
+        try {
             const user = req.user;
-            const {pergunta01, pergunta02, pergunta03, pergunta04, pergunta05, pergunta06, pergunta07, pergunta08, operacao_id, disciplina_id} = req.body;
+            const { pergunta01, pergunta02, pergunta03, pergunta04, pergunta05, pergunta06, pergunta07, pergunta08, operacao_id, disciplina_id } = req.body;
 
             await Respostas.create({
                 operacao_id, disciplina_id, resposta_01: pergunta01, resposta_02: pergunta02, resposta_03: pergunta03, resposta_04: pergunta04,
                 resposta_05: pergunta05, resposta_06: pergunta06, resposta_07: pergunta07, resposta_08: pergunta08
             });
-            
-            await QuestionarioAluno.update({ flagRespondido: true }, { 
-                where: { 
+
+            await QuestionarioAluno.update({ flagRespondido: true }, {
+                where: {
                     aluno_id: user.id,
                     operacao_id,
                     disciplina_id
-                } 
+                }
             });
-            
+
+            res.redirect('/');
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'deu pau aqui' });
+        }
+    }
+
+    static async SalvarRespostaCurso(req, res) {
+        try {
+            const user = req.user;
+            const { pergunta01, pergunta02, pergunta03, pergunta04, pergunta05, pergunta06, pergunta07, pergunta08, operacao_id, curso_id } = req.body;
+
+            await RespostasCurso.create({
+                operacao_id, curso_id, resposta_01: pergunta01, resposta_02: pergunta02, resposta_03: pergunta03, resposta_04: pergunta04,
+                resposta_05: pergunta05, resposta_06: pergunta06, resposta_07: pergunta07, resposta_08: pergunta08
+            });
+
+            await QuestionarioCurso.update({ flagRespondido: true }, {
+                where: {
+                    aluno_id: user.id,
+                    operacao_id,
+                    curso_id
+                }
+            });
+
             res.redirect('/');
         }catch(error){
             console.log(error);
-            res.status(500).json({ message: 'deu pau aqui' });
+            res.status(500).json({ message: 'deu pau' });
         }
     }
 
@@ -174,6 +225,10 @@ module.exports = class QuestionarioController {
             const relacaoDisciplinas = await AlunoDisciplina.findAll({ raw: true });
             console.log(relacaoDisciplinas);
 
+            const alunosIds = relacaoDisciplinas.map(relacao => relacao.aluno_id);
+
+            const alunos = await Aluno.findAll({ raw: true, where: { aluno_id: alunosIds }, attributes: ['aluno_id', 'curso_id'] });
+
             const operacao = await QuestionarioDisponibilizado.create({ questionario_id: questionario, dataFim, flagDisponivel: true });
             for (const relacao of relacaoDisciplinas) {
                 await QuestionarioAluno.create({
@@ -181,6 +236,14 @@ module.exports = class QuestionarioController {
                     disciplina_id: relacao.disciplina_id, operacao_id: operacao.id, flagRespondido: false
                 });
             }
+
+            for (const aluno of alunos) {
+                await QuestionarioCurso.create({
+                    questionario_id: questionario, aluno_id: aluno.aluno_id,
+                    curso_id: aluno.curso_id, operacao_id: operacao.id, flagRespondido: false
+                });
+            }
+
             res.redirect('/');
         } catch (error) {
             console.log(error);
