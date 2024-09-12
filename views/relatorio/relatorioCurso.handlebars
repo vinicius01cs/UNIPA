@@ -1,24 +1,23 @@
 <body>
-    <div class="container customForm">
-        <div class="container-sm text-center div-card-1" style="">
-            <h2>Relatorio Geral</h2>
-            <p>{{dadosRelatorios.mediaAlunosDisciplina}}% dos alunos da instituição avaliaram uma ou mais disciplinas
-                durante a avaliação.</p>
-            <p>{{dadosRelatorios.mediaAlunosCurso}}% dos alunos da instituição fizeram a avaliação do curso.</p>
+    <div class="container text-center customForm">
+        <h2>Relatorio Especifico</h2>
+        <h3>Curso - {{curso.nome}}</h3>
+        <div class="container-sm text-center div-card-1">
+            <p>{{dadosRelatorios.mediaAlunosRespondentesCurso}}% dos alunos de {{curso.nome}} avaliaram o curso</p>
         </div>
-
-        <div class="form-group mx-auto">
-            <label>Visualizar Relatórios por Curso</label>
-            <select name="curso" id="curso" class="form-control form-control-sm d-block mb-2" required>
-                {{#each cursos}}
-                <option value="{{curso_id}}">{{nome}}</option>
-                {{/each}}
-            </select>
-            <a id="linkRelatorio" href="#" class="btn btn-primary" onclick="aplicarFiltro()">Aplicar Filtro</a>
+        <div class="container-sm text-center div-card-1">
+            <div class="form-group mx-auto">
+                <label>Visualizar Relatórios por Disciplina</label>
+                <select name="disciplina" id="disciplina" class="form-control form-control-sm d-block mb-2" required>
+                    {{#each disciplinas}}
+                    <option value="{{disciplina_id}}">{{nome}}</option>
+                    {{/each}}
+                </select>
+                <a id="linkRelatorio" href="#" class="btn btn-primary" onclick="aplicarFiltro()">Aplicar Filtro</a>
+            </div>
         </div>
-
         <div class="container-lg div_card_expandido text-center">
-            <label>Média Geral da Instituição</label>
+            <label>Média do Curso</label>
             <button id="toggleButton">Expandir</button>
             <div id="expandableDiv" class="expandable">
                 <ul class="list-group">
@@ -53,7 +52,7 @@
                     {{/each}}
                 </ul>
                 <ul class="list-group">
-                    {{#each dadosRelatorios.mediaPorPerguntaDisciplina}}
+                    {{#each dadosRelatorios.mediaPorPerguntaCurso}}
                     <li class="list-group-item active">
                         <label>Nota média</label>
                     </li>
@@ -98,12 +97,13 @@
             this.textContent = "Recolher";
         }
     });
+
     function aplicarFiltro() {
-        var select = document.getElementById("curso");
-        var cursoId = select.value;
+        var select = document.getElementById("disciplina");
+        var disciplinaId = select.value;
         const operacaoId = '{{operacao_id}}';
         var link = document.getElementById("linkRelatorio");
         // Atualizando o href com o curso_id selecionado
-        link.href = "/relatorio/relatorioCurso/" + cursoId + "/" + operacaoId;
+        link.href = "/relatorio/relatorioCurso/" + disciplinaId + "/" + operacaoId;
     }
 </script>

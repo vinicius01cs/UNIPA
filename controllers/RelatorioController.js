@@ -5,7 +5,11 @@ const QuestionarioAluno = require('../models/QuestionarioAluno');
 const QuestionarioCurso = require('../models/QuestionarioCurso');
 const Questionario = require('../models/Questionario');
 const Respostas = require('../models/Respostas');
+const RespostasCurso = require('../models/RespostasCurso');
 const Aluno = require('../models/Aluno');
+const Curso = require('../models/Curso');
+const Disciplina = require('../models/Disciplina');
+const DisciplinaCurso = require('../models/DisciplinaCurso');
 
 require('dotenv').config()
 
@@ -13,8 +17,6 @@ module.exports = class RelatorioController {
 
     static async IndexCpa(req, res) {
         try {
-            console.log(req.params.id);
-
             const questionarioCurso = await QuestionarioCurso.findAll({
                 where: {
                     operacao_id: req.params.id
@@ -28,28 +30,90 @@ module.exports = class RelatorioController {
                 }
             });
 
+            const cursos = await Curso.findAll({
+                raw: true,
+            })
+
+            //console.log(cursos)
             const mediaAlunosDisciplina = await RelatorioController.CalcularMediaAlunosRespondentes(questionarioAluno);
             const mediaAlunosCurso = await RelatorioController.CalcularMediaAlunosRespondentesCurso(questionarioCurso);
             const perguntasQuestionario = await RelatorioController.ObterPerguntasQuestionario(req.params.id);
             const mediaPorPerguntaDisciplina = await RelatorioController.ObterMediaPorPerguntaDisciplina(req.params.id);
-            console.log(perguntasQuestionario);
-            console.log(mediaPorPerguntaDisciplina);
-            //junta tudo em um objeto e passa como parametro 
+
             const dadosRelatorios = {
                 mediaAlunosDisciplina: mediaAlunosDisciplina,
                 mediaAlunosCurso: mediaAlunosCurso,
                 perguntasQuestionario: perguntasQuestionario,
-                mediaPorPerguntaDisciplina: mediaPorPerguntaDisciplina
+                mediaPorPerguntaDisciplina: mediaPorPerguntaDisciplina,
             }
-            res.render('relatorio/indexCpa', { dadosRelatorios });
+
+            res.render('relatorio/indexCpa', { dadosRelatorios, cursos, operacao_id: req.params.id });
         } catch (error) {
             console.log(error);
             res.status(500).send({ message: 'Erro ao tentar acessar a página de relatórios de CPA' });
         }
     }
 
-    static async CalcularMediaAlunosRespondentes(questionarioAluno) {
-        const qtdAluno = await Aluno.count();
+    static async RelatorioCurso(req, res) {
+        try {
+            const curso = await Curso.findOne({
+                raw: true,
+                where: {
+                    curso_id: req.params.curso_id
+                }
+            })
+            const questionarioCurso = await QuestionarioCurso.findAll({
+                where: {
+                    operacao_id: req.params.operacao_id,
+                    curso_id: req.params.curso_id
+                }
+            });
+
+            const disciplinasCurso = await DisciplinaCurso.findAll({
+                raw: true,
+                where: {
+                    curso_id: req.params.curso_id
+                },
+                attributes: ['disciplina_id'],
+            });
+
+            const disciplinaId = disciplinasCurso.map(d => d.disciplina_id);
+
+            const disciplinas = await Disciplina.findAll({
+                raw: true,
+                where: {
+                    disciplina_id: disciplinaId
+                }
+            });
+
+            const perguntasQuestionario = await RelatorioController.ObterPerguntasQuestionario(req.params.operacao_id);
+            const mediaPorPerguntaCurso = await RelatorioController.ObterMediaPorPerguntaCurso(req.params.operacao_id, req.params.curso_id,);
+            const CalcularMediaAlunosRespondentesCurso = await RelatorioController.CalcularMediaAlunosRespondentesCurso(questionarioCurso, req.params.curso_id);
+
+            const dadosRelatorios = {
+                perguntasQuestionario: perguntasQuestionario,
+                mediaPorPerguntaCurso: mediaPorPerguntaCurso,
+                mediaAlunosRespondentesCurso: CalcularMediaAlunosRespondentesCurso
+            }
+
+            res.render('relatorio/relatorioCurso', { dadosRelatorios, curso, disciplinas });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({ message: 'Erro ao tentar acessar a página de relatórios de Curso' });
+        }
+    }
+
+    static async CalcularMediaAlunosRespondentes(questionarioAluno, curso_id = null) {
+        let qtdAluno;
+        if (curso_id === null) {
+            qtdAluno = await Aluno.count();
+        } else {
+            qtdAluno = await Aluno.count({
+                where: {
+                    curso_id: curso_id
+                }
+            });
+        }
 
         const respondentes = questionarioAluno.filter(qa => qa.flagRespondido == 1);
         const respondentesIdUnico = [...new Set(respondentes.map(qa => qa.aluno_id))];
@@ -57,8 +121,17 @@ module.exports = class RelatorioController {
         return (qtdAlunoRespondente / qtdAluno) * 100;
     }
 
-    static async CalcularMediaAlunosRespondentesCurso(questionarioCurso) {
-        const qtdAluno = await Aluno.count();
+    static async CalcularMediaAlunosRespondentesCurso(questionarioCurso, curso_id = null) {
+        let qtdAluno;
+        if (curso_id === null) {
+            qtdAluno = await Aluno.count();
+        } else {
+            qtdAluno = await Aluno.count({
+                where: {
+                    curso_id: curso_id
+                }
+            });
+        }
 
         const respondentes = questionarioCurso.filter(qa => qa.flagRespondido == 1);
         const respondentesIdUnico = [...new Set(respondentes.map(qa => qa.aluno_id))];
@@ -101,6 +174,27 @@ module.exports = class RelatorioController {
             ],
             where: {
                 operacao_id: operacao_id
+            }
+        });
+        return respostas;
+    }
+
+    static async ObterMediaPorPerguntaCurso(operacao_id, curso_id) {
+        const respostas = await RespostasCurso.findAll({
+            raw: true,
+            attributes: [
+                [Sequelize.fn('AVG', Sequelize.col('resposta_01')), 'mResposta01'],
+                [Sequelize.fn('AVG', Sequelize.col('resposta_02')), 'mResposta02'],
+                [Sequelize.fn('AVG', Sequelize.col('resposta_03')), 'mResposta03'],
+                [Sequelize.fn('AVG', Sequelize.col('resposta_04')), 'mResposta04'],
+                [Sequelize.fn('AVG', Sequelize.col('resposta_05')), 'mResposta05'],
+                [Sequelize.fn('AVG', Sequelize.col('resposta_06')), 'mResposta06'],
+                [Sequelize.fn('AVG', Sequelize.col('resposta_07')), 'mResposta07'],
+                [Sequelize.fn('AVG', Sequelize.col('resposta_08')), 'mResposta08'],
+            ],
+            where: {
+                operacao_id: operacao_id,
+                curso_id: curso_id
             }
         });
         return respostas;
