@@ -7,4 +7,6 @@ router.get('/indexCpa/:id', authMiddleware, checkUserLevel(1), relatorioControll
 
 router.get('/relatorioCurso/:curso_id/:operacao_id', authMiddleware, checkUserLevel(1), relatorioController.RelatorioCurso);
 
+router.get('/relatorioDisciplina/:disciplina_id/:operacao_id', authMiddleware, checkUserLevel(1), relatorioController.RelatorioDisciplina);
+
 module.exports = router;

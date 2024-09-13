@@ -34,7 +34,6 @@ module.exports = class RelatorioController {
                 raw: true,
             })
 
-            //console.log(cursos)
             const mediaAlunosDisciplina = await RelatorioController.CalcularMediaAlunosRespondentes(questionarioAluno);
             const mediaAlunosCurso = await RelatorioController.CalcularMediaAlunosRespondentesCurso(questionarioCurso);
             const perguntasQuestionario = await RelatorioController.ObterPerguntasQuestionario(req.params.id);
@@ -96,10 +95,34 @@ module.exports = class RelatorioController {
                 mediaAlunosRespondentesCurso: CalcularMediaAlunosRespondentesCurso
             }
 
-            res.render('relatorio/relatorioCurso', { dadosRelatorios, curso, disciplinas });
+            res.render('relatorio/relatorioCurso', { dadosRelatorios, curso, disciplinas, operacao_id: req.params.operacao_id });
         } catch (error) {
             console.log(error);
             res.status(500).send({ message: 'Erro ao tentar acessar a página de relatórios de Curso' });
+        }
+    }
+
+    static async RelatorioDisciplina(req, res) {
+        try {
+            const disciplina = await Disciplina.findOne({
+                raw: true,
+                where: {
+                    disciplina_id: req.params.disciplina_id
+                }
+            });
+
+            const perguntasQuestionario = await RelatorioController.ObterPerguntasQuestionario(req.params.operacao_id);
+            const mediaPorPerguntaDisciplina = await RelatorioController.ObterMediaPorPerguntaDisciplina(req.params.operacao_id, req.params.disciplina_id);
+
+            const dadosRelatorios = {
+                perguntasQuestionario: perguntasQuestionario,
+                mediaPorPerguntaDisciplina: mediaPorPerguntaDisciplina
+            }
+
+            res.render('relatorio/relatorioDisciplina', { dadosRelatorios, disciplina });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({ message: 'Erro ao tentar acessar a página de relatórios de Disciplina' });
         }
     }
 
@@ -159,24 +182,47 @@ module.exports = class RelatorioController {
         return questionario;
     }
 
-    static async ObterMediaPorPerguntaDisciplina(operacao_id) {
-        const respostas = await Respostas.findAll({
-            raw: true,
-            attributes: [
-                [Sequelize.fn('AVG', Sequelize.col('resposta_01')), 'mResposta01'],
-                [Sequelize.fn('AVG', Sequelize.col('resposta_02')), 'mResposta02'],
-                [Sequelize.fn('AVG', Sequelize.col('resposta_03')), 'mResposta03'],
-                [Sequelize.fn('AVG', Sequelize.col('resposta_04')), 'mResposta04'],
-                [Sequelize.fn('AVG', Sequelize.col('resposta_05')), 'mResposta05'],
-                [Sequelize.fn('AVG', Sequelize.col('resposta_06')), 'mResposta06'],
-                [Sequelize.fn('AVG', Sequelize.col('resposta_07')), 'mResposta07'],
-                [Sequelize.fn('AVG', Sequelize.col('resposta_08')), 'mResposta08'],
-            ],
-            where: {
-                operacao_id: operacao_id
-            }
-        });
-        return respostas;
+    static async ObterMediaPorPerguntaDisciplina(operacao_id, disciplina_id = null) {
+        let respostas;
+        if (disciplina_id === null) {
+            const respostas = await Respostas.findAll({
+                raw: true,
+                attributes: [
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_01')), 'mResposta01'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_02')), 'mResposta02'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_03')), 'mResposta03'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_04')), 'mResposta04'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_05')), 'mResposta05'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_06')), 'mResposta06'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_07')), 'mResposta07'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_08')), 'mResposta08'],
+                ],
+                where: {
+                    operacao_id: operacao_id
+                }
+            });
+            return respostas;
+        }
+        else {
+            const respostas = await Respostas.findAll({
+                raw: true,
+                attributes: [
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_01')), 'mResposta01'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_02')), 'mResposta02'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_03')), 'mResposta03'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_04')), 'mResposta04'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_05')), 'mResposta05'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_06')), 'mResposta06'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_07')), 'mResposta07'],
+                    [Sequelize.fn('AVG', Sequelize.col('resposta_08')), 'mResposta08'],
+                ],
+                where: {
+                    operacao_id: operacao_id,
+                    disciplina_id: disciplina_id
+                }
+            });
+            return respostas;
+        }
     }
 
     static async ObterMediaPorPerguntaCurso(operacao_id, curso_id) {
