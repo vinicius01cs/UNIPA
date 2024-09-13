@@ -19,7 +19,7 @@ function authMiddleware(req, res, next) {
 
 function checkUserLevel(tipoUsuario) {
     return (req, res, next) => {
-        if (req.user.tipoUsuario !== tipoUsuario) {
+        if (!tipoUsuario.includes(req.user.tipoUsuario)) {
             return res.redirect('../auth/login');
         } else {
             next();
