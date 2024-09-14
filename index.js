@@ -37,6 +37,7 @@ const cursoRoutes = require('./routes/cursoRoutes');
 const disciplinaRoutes = require('./routes/disciplinaRoutes');
 const alunoRoutes = require('./routes/alunoRoutes');
 const relatorioRoutes = require('./routes/relatorioRoutes');
+const OpenAIRoutes = require('./routes/OpenAIRoutes');
 
 
 
@@ -81,6 +82,7 @@ app.use('/auth', authRoutes);
 app.use('/disciplina', disciplinaRoutes);
 app.use('/aluno', alunoRoutes);
 app.use('/relatorio', relatorioRoutes);
+app.use('/openAI', OpenAIRoutes);
 app.use('/', homeRoutes);
 
 conn

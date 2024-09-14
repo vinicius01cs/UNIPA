@@ -28,6 +28,7 @@
     "mysql2": "^3.6.5",
     "nodemailer": "^6.9.9",
     "nodemon": "^3.0.2",
+    "openai": "^4.61.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "sequelize": "^6.37.0"
