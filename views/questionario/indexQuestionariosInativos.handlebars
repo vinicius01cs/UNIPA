@@ -1,0 +1,19 @@
+<div class="container text-center"></div>
+<table class="table">
+    <thread>
+        <tr>
+            <th scope="col">ID Operação</th>
+            <th scope="col">Data Fim</th>
+        </tr>
+    </thread>
+    <tbody>
+        {{#each questionariosFinalizados}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.dataFim}}</td>
+            <td><a href="/relatorio/indexCpa/{{this.id}}" class="btn btn-primary btn-sm active">Visualizar Relatorios</a></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</div>

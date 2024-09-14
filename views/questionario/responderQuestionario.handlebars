@@ -1,10 +1,10 @@
 <div class="container text-center customForm">
-    <form method="POST" action="/questionario/responderQuestionario/{{questionario.questionario_id}}">
+    <form method="POST" action="/questionario/responderQuestionario/{{questionario.questionario_id}}/{{dadosFiltrados.questionarioAluno.aluno_id}}">
         <input type="hidden" name="questionario_id" value="{{questionario.questionario_id}}">
-        <input type="hidden" name="disciplina_id" value="{{dadosCombinados.[0].disciplina.disciplina_id}}">
-        <input type="hidden" name="operacao_id" value="{{dadosCombinados.[0].questionarioAluno.operacao_id}}">
+        <input type="hidden" name="disciplina_id" value="{{dadosFiltrados.disciplina.disciplina_id}}">
+        <input type="hidden" name="operacao_id" value="{{dadosFiltrados.questionarioAluno.operacao_id}}">
         <div class="form-group mx-auto">
-            <h3>Responder Pesquisa - {{dadosCombinados.[0].disciplina.nome}}</h3>
+            <h3>Responder Pesquisa - {{dadosFiltrados.disciplina.nome}}</h3>
             <div class="form-row justify-content-center mt-5">
                 <div class="col-md-5">
                     <label for="pergunta01" class="mb-2">{{questionario.pergunta_01}}</label>

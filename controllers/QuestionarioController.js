@@ -1,5 +1,6 @@
 const { raw } = require('mysql2');
 const moment = require('moment');
+const { Op, fn, col } = require('sequelize');
 const Questionario = require('../models/Questionario');
 const QuestionarioDisponibilizado = require('../models/QuestionarioDisponibilizado');
 const AlunoDisciplina = require('../models/AlunoDisciplina');
@@ -7,9 +8,12 @@ const QuestionarioAluno = require('../models/QuestionarioAluno');
 const QuestionarioCurso = require('../models/QuestionarioCurso');
 const Aluno = require('../models/Aluno');
 const Disciplina = require('../models/Disciplina');
+const DisciplinaCurso = require('../models/DisciplinaCurso');
 const Respostas = require('../models/Respostas');
 const RespostasCurso = require('../models/RespostasCurso');
 const Curso = require('../models/Curso');
+const Professor = require('../models/Professor');
+const Coordenador = require('../models/Coordenador');
 
 require('dotenv').config()
 
@@ -30,7 +34,7 @@ module.exports = class QuestionarioController {
     static async IndexAluno(req, res) {
         try {
             const user = req.user;
-            const aluno = await Aluno.findOne({ raw: true, where: { aluno_id: user.id } });
+            const aluno = await Aluno.findOne({ raw: true, where: { usuario_id: user.id } });
 
             const questionarioAluno = await QuestionarioAluno.findAll({ raw: true, where: { aluno_id: aluno.aluno_id, flagRespondido: false } });
 
@@ -57,6 +61,7 @@ module.exports = class QuestionarioController {
 
             req.session.dadosCombinados = dadosCombinados;
             req.session.dadosCombinadosCurso = dadosCombinadosCurso;
+            console.log(dadosCombinados);
             res.render('questionario/indexQuestionariosNaoRespondidos', { dadosCombinados, dadosCombinadosCurso });
         } catch (error) {
             console.log(error);
@@ -75,6 +80,88 @@ module.exports = class QuestionarioController {
         }
     }
 
+    static async IndexQuestionarioFinalizado(req, res) {
+        try {
+            const questionariosFinalizados = await QuestionarioDisponibilizado.findAll({ raw: true, where: { flagDisponivel: false } });
+            res.render('questionario/indexQuestionariosInativos', { questionariosFinalizados });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: error });
+        }
+    }
+
+    static async IndexQuestionarioFinalizadoProfessor(req, res) {
+        try {
+            const questionariosFinalizados = await QuestionarioDisponibilizado.findAll({
+                raw: true,
+                where: { flagDisponivel: false }
+            });
+
+            const professor = await Professor.findOne({
+                raw: true,
+                where: { usuario_id: req.user.id },
+                attributes: ['professor_id']
+            });
+
+            const disciplinas = await Disciplina.findAll({
+                raw: true,
+                where: { professor_id: professor.professor_id }
+            });
+
+            const respostasComNome = await QuestionarioController.ObterDadosIndexProfessor(disciplinas);
+            console.log(respostasComNome);
+            res.render('questionario/indexQuestionariosInativosProfessor', { disciplinas, respostas: respostasComNome });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    static async IndexQuestionarioFinalizadoCoordenador(req, res) {
+        try {
+            const coordenador = await Coordenador.findOne({ raw: true, where: { usuario_id: req.user.id } });
+            const curso = await Curso.findAll({ raw: true, where: { coordenador_id: coordenador.coordenador_id } });
+            const disciplinas = await DisciplinaCurso.findAll({ raw: true, where: { curso_id: curso.map(curso => curso.curso_id) } });
+
+            console.log(disciplinas);
+            const respostas = await RespostasCurso.findAll({
+                raw: true,
+                where: {
+                    curso_id: {
+                        [Op.in]: curso.map(curso => curso.curso_id)
+                    }
+                },
+                group: ['curso_id', 'operacao_id'],
+            });
+
+            const cursoNome = await Curso.findAll({
+                raw: true,
+                attributes: ['nome', 'curso_id'],
+                where: {
+                    curso_id: {
+                        [Op.in]: curso.map(curso => curso.curso_id)
+                    }
+                }
+            });
+
+            const cursoMap = {};
+            cursoNome.forEach(curso => {
+                cursoMap[curso.curso_id] = curso.nome;
+            });
+
+            const respostasComNomeCurso = respostas.map(resposta => ({
+                ...resposta,
+                curso_nome: cursoMap[resposta.curso_id] || 'Nome não encontrado'
+            }));
+
+            const respostasComNomeDisciplina = await QuestionarioController.ObterDadosIndexProfessor(disciplinas);
+            res.render('questionario/indexQuestionariosInativosCoordenador', { respostasCurso: respostasComNomeCurso, respostasDisciplinas: respostasComNomeDisciplina });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: error.message });
+        }
+    }
+
     static async FinalizarQuestionario(req, res) {
         try {
             const id = req.params.id;
@@ -87,34 +174,47 @@ module.exports = class QuestionarioController {
 
     static async ResponderQuestionario(req, res) {
         try {
-            const questionario_id = req.params.id;
+            const questionario_id = Number(req.params.operacao_id);
+            const disciplina_id = Number(req.params.disciplina_id);
+
             const questionario = await Questionario.findOne({ raw: true, where: { questionario_id } });
             const dadosCombinados = req.session.dadosCombinados;
-            //console.log(dadosCombinados);
-            res.render('questionario/responderQuestionario', { questionario, dadosCombinados });
+
+            if (!dadosCombinados) {
+                return res.status(500).json({ message: 'Não foi possível encontrar os dados combinados' });
+            } else {
+                const dadosFiltrados = dadosCombinados.find(dado => dado.questionarioAluno.disciplina_id === disciplina_id);
+                res.render('questionario/responderQuestionario', { questionario, dadosFiltrados });
+            }
         } catch (error) {
+            console.log(error);
             res.status(500).json({ message: error });
         }
     }
 
     static async ResponderQuestionarioCurso(req, res) {
         try {
-            const questionario_id = req.params.id;
+            const questionario_id = Number(req.params.id);
+            const curso_id = Number(req.params.curso_id);
             const questionario = await Questionario.findOne({ raw: true, where: { questionario_id } });
             const dadosCombinadosCurso = req.session.dadosCombinadosCurso;
-
             console.log(dadosCombinadosCurso);
-            res.render('questionario/responderQuestionarioCurso', { questionario, dadosCombinadosCurso });
+            if (!dadosCombinadosCurso) {
+                return res.status(500).json({ message: 'Não foi possível encontrar os dados combinados' });
+            } else {
+                const dadosFiltrados = dadosCombinadosCurso.find(dado => dado.questionarioCurso.curso_id === curso_id);
+                console.log(dadosFiltrados);
+                res.render('questionario/responderQuestionarioCurso', { questionario, dadosFiltrados });
+            }
         } catch (error) {
-            res.status(500).json({ message: error });
+            res.status(500).json({ message: 'Erro ao buscar questionario' });
         }
     }
 
     static async SalvarResposta(req, res) {
         try {
-            const user = req.user;
+            const aluno_id = req.params.aluno_id;
             const { pergunta01, pergunta02, pergunta03, pergunta04, pergunta05, pergunta06, pergunta07, pergunta08, operacao_id, disciplina_id } = req.body;
-
             await Respostas.create({
                 operacao_id, disciplina_id, resposta_01: pergunta01, resposta_02: pergunta02, resposta_03: pergunta03, resposta_04: pergunta04,
                 resposta_05: pergunta05, resposta_06: pergunta06, resposta_07: pergunta07, resposta_08: pergunta08
@@ -122,7 +222,7 @@ module.exports = class QuestionarioController {
 
             await QuestionarioAluno.update({ flagRespondido: true }, {
                 where: {
-                    aluno_id: user.id,
+                    aluno_id,
                     operacao_id,
                     disciplina_id
                 }
@@ -137,7 +237,7 @@ module.exports = class QuestionarioController {
 
     static async SalvarRespostaCurso(req, res) {
         try {
-            const user = req.user;
+            const aluno_id = req.params.aluno_id;
             const { pergunta01, pergunta02, pergunta03, pergunta04, pergunta05, pergunta06, pergunta07, pergunta08, operacao_id, curso_id } = req.body;
 
             await RespostasCurso.create({
@@ -147,14 +247,14 @@ module.exports = class QuestionarioController {
 
             await QuestionarioCurso.update({ flagRespondido: true }, {
                 where: {
-                    aluno_id: user.id,
+                    aluno_id,
                     operacao_id,
                     curso_id
                 }
             });
 
             res.redirect('/');
-        }catch(error){
+        } catch (error) {
             console.log(error);
             res.status(500).json({ message: 'deu pau' });
         }
@@ -249,5 +349,75 @@ module.exports = class QuestionarioController {
             console.log(error);
             res.status(500).json({ message: error });
         }
+    }
+
+    static async ObterDadosIndexProfessor(disciplinas) {
+        // Corrigir a forma de pegar as respostas
+        const respostas = await Respostas.findAll({
+            raw: true,
+            where: {
+                disciplina_id: {
+                    [Op.in]: disciplinas.map(disciplina => disciplina.disciplina_id)
+                }
+            },
+            group: ['disciplina_id', 'operacao_id'],
+        });
+
+        // Corrigir o where no Disciplina
+        const disciplinaNome = await Disciplina.findAll({
+            raw: true,
+            attributes: ['nome', 'disciplina_id'],
+            where: {
+                disciplina_id: {
+                    [Op.in]: disciplinas.map(disciplina => disciplina.disciplina_id)
+                }
+            }
+        });
+
+        const disciplinaMap = {};
+        disciplinaNome.forEach(disciplina => {
+            disciplinaMap[disciplina.disciplina_id] = disciplina.nome;
+        });
+
+        const respostasComNome = respostas.map(resposta => ({
+            ...resposta,
+            disciplina_nome: disciplinaMap[resposta.disciplina_id] || 'Nome não encontrado'
+        }));
+
+        return respostasComNome;
+    }
+
+    static async ObterDadosIndexCoordenador(curso) {
+        const respostas = await RespostasCurso.findAll({
+            raw: true,
+            where: {
+                curso_id: {
+                    [Op.in]: curso.map(curso => curso.curso_id)
+                }
+            },
+            group: ['curso_id', 'operacao_id'],
+        });
+
+        const cursoNome = await Curso.findAll({
+            raw: true,
+            attributes: ['nome', 'curso_id'],
+            where: {
+                curso_id: {
+                    [Op.in]: curso.map(curso => curso.curso_id)
+                }
+            }
+        });
+
+        const cursoMap = {};
+        cursoNome.forEach(curso => {
+            cursoMap[curso.curso_id] = curso.nome;
+        });
+
+        const respostasComNome = respostas.map(resposta => ({
+            ...resposta,
+            curso_nome: cursoMap[resposta.curso_id] || 'Nome não encontrado'
+        }));
+
+        return respostasComNome;
     }
 }

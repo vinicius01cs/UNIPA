@@ -1,4 +1,3 @@
-
 .menu {
     position: fixed;
     top: 0;
@@ -101,4 +100,47 @@ input[type="file"] {
     text-align: center;
     display: block;
     cursor: pointer;
+}
+
+.expandable {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+    display: flex;
+    justify-content: space-between;
+}
+
+.expandable ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 45%;
+}
+
+.expandable ul li {
+    margin-bottom: 10px;
+}
+
+.expandable.expanded {
+    max-height: 700px;
+    display: flex;
+    justify-content: space-between;
+    /* Ajuste este valor de acordo com o conteúdo */
+}
+
+.div_card_expandido{
+    border-color: black;
+    border-radius: 25px;
+    padding: 10px;
+    border: 1px solid black;
+    margin-top: 30px;
+}
+
+.div-card-1{
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.div-card-1 h2{
+    padding-bottom: 15px;
 }

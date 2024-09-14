@@ -1,0 +1,108 @@
+<body>
+    <div class="container text-center customForm">
+        <h2>Relatorio Especifico</h2>
+        <h3>Curso - {{curso.nome}}</h3>
+        <div class="container-sm text-center div-card-1">
+            <p>{{dadosRelatorios.mediaAlunosRespondentesCurso}}% dos alunos de {{curso.nome}} avaliaram o curso</p>
+        </div>
+        <div class="container-sm text-center div-card-1">
+            <div class="form-group mx-auto">
+                <label>Visualizar Relatórios por Disciplina</label>
+                <select name="disciplina" id="disciplina" class="form-control form-control-sm d-block mb-2" required>
+                    {{#each disciplinas}}
+                    <option value="{{disciplina_id}}">{{nome}}</option>
+                    {{/each}}
+                </select>
+                <a id="linkRelatorio" href="#" class="btn btn-primary" onclick="aplicarFiltro()">Aplicar Filtro</a>
+            </div>
+        </div>
+        <div class="container-lg div_card_expandido text-center">
+            <label>Média do Curso</label>
+            <button id="toggleButton">Expandir</button>
+            <div id="expandableDiv" class="expandable">
+                <ul class="list-group">
+                    {{#each dadosRelatorios.perguntasQuestionario}}
+                    <li class="list-group-item active">
+                        <label>Pergunta</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{pergunta_01}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{pergunta_02}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{pergunta_03}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{pergunta_04}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{pergunta_05}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{pergunta_06}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{pergunta_07}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{pergunta_08}}</label>
+                    </li>
+                    {{/each}}
+                </ul>
+                <ul class="list-group">
+                    {{#each dadosRelatorios.mediaPorPerguntaCurso}}
+                    <li class="list-group-item active">
+                        <label>Nota média</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{mResposta01}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{mResposta02}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{mResposta03}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{mResposta04}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{mResposta05}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{mResposta06}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{mResposta07}}</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>{{mResposta08}}</label>
+                    </li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    document.getElementById("toggleButton").addEventListener("click", function () {
+        var div = document.getElementById("expandableDiv");
+        if (div.classList.contains("expanded")) {
+            div.classList.remove("expanded");
+            this.textContent = "Expandir";
+        } else {
+            div.classList.add("expanded");
+            this.textContent = "Recolher";
+        }
+    });
+
+    function aplicarFiltro() {
+        var select = document.getElementById("disciplina");
+        var disciplinaId = select.value;
+        const operacaoId = '{{operacao_id}}';
+        var link = document.getElementById("linkRelatorio");
+        link.href = "/relatorio/relatorioDisciplina/" + disciplinaId + "/" + operacaoId;
+    }
+</script>

@@ -1,0 +1,20 @@
+<div class="container text-center">
+    <table class="table">
+        <thread>
+            <tr>
+                <th scope="col">ID Operação</th>
+                <th scope="col">Disciplina</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{#each respostas}}
+            <tr>
+                <td>{{this.operacao_id}}</td>
+                <td>{{this.disciplina_nome}}</td>
+                <td><a href="/relatorio/relatorioDisciplina/{{this.disciplina_id}}/{{this.operacao_id}}"
+                        class="btn btn-primary btn-sm active">Visualizar Relatorios</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

@@ -36,6 +36,9 @@ const authRoutes = require('./routes/authRoutes');
 const cursoRoutes = require('./routes/cursoRoutes');
 const disciplinaRoutes = require('./routes/disciplinaRoutes');
 const alunoRoutes = require('./routes/alunoRoutes');
+const relatorioRoutes = require('./routes/relatorioRoutes');
+
+
 
 const QuestionarioAluno = require('./models/QuestionarioAluno');
 const QuestionarioDisponilizado = require('./models/QuestionarioDisponibilizado');
@@ -77,6 +80,7 @@ app.use('/curso', cursoRoutes);
 app.use('/auth', authRoutes);
 app.use('/disciplina', disciplinaRoutes);
 app.use('/aluno', alunoRoutes);
+app.use('/relatorio', relatorioRoutes);
 app.use('/', homeRoutes);
 
 conn
