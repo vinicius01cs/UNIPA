@@ -10,7 +10,7 @@
         {{#each dadosCombinados}}
         <tr>
             <td>{{this.disciplina.nome}}</td>
-            <td><a href="/questionario/responderQuestionario/{{this.questionarioAluno.questionario_id}}"
+            <td><a href="/questionario/responderQuestionario/{{this.questionarioAluno.questionario_id}}/{{this.disciplina.disciplina_id}}"
                     class="btn btn-primary btn-sm active">Responder</a></td>
         </tr>
         {{/each}}
@@ -28,7 +28,7 @@
         {{#each dadosCombinadosCurso}}
         <tr>
             <td>{{this.curso.nome}}</td>
-            <td><a href="/questionario/responderQuestionarioCurso/{{this.questionarioCurso.questionario_id}}"
+            <td><a href="/questionario/responderQuestionarioCurso/{{this.questionarioCurso.questionario_id}}/{{this.curso.curso_id}}"
                     class="btn btn-primary btn-sm active">Responder</a></td>
         </tr>
         {{/each}}

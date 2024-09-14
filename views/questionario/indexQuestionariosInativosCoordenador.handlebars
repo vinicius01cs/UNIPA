@@ -1,0 +1,44 @@
+<div class="container text-center">
+    <div clas="container">
+        <h4>Curso</h4>
+        <table class="table">
+            <thread>
+                <tr>
+                    <th scope="col">ID Operação</th>
+                    <th scope="col">Curso</th>
+                </tr>
+            </thread>
+            <tbody>
+                {{#each respostasCurso}}
+                <tr>
+                    <td>{{this.operacao_id}}</td>
+                    <td>{{this.curso_nome}}</td>
+                    <td><a href="/relatorio/relatorioCurso/{{this.curso_id}}/{{this.operacao_id}}"
+                            class="btn btn-primary btn-sm active">Visualizar Relatorios</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div clas="container">
+        <h4>Disciplinas</h4>
+        <table class="table">
+            <thread>
+                <tr>
+                    <th scope="col">ID Operação</th>
+                    <th scope="col">Disciplina</th>
+                </tr>
+            </thread>
+            <tbody>
+                {{#each respostasDisciplinas}}
+                <tr>
+                    <td>{{this.operacao_id}}</td>
+                    <td>{{this.disciplina_nome}}</td>
+                    <td><a href="/relatorio/relatorioDisciplina/{{this.disciplina_id}}/{{this.operacao_id}}"
+                            class="btn btn-primary btn-sm active">Visualizar Relatorios</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
