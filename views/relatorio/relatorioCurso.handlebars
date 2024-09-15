@@ -1,9 +1,11 @@
 <body>
     <div class="container text-center customForm">
-        <h2>Relatorio Especifico</h2>
-        <h3>Curso - {{curso.nome}}</h3>
-        <div class="container-sm text-center div-card-1">
-            <p>{{dadosRelatorios.mediaAlunosRespondentesCurso}}% dos alunos de {{curso.nome}} avaliaram o curso</p>
+        <div class="container">
+            <h2>Relatorio Especifico</h2>
+            <h3>Curso - {{curso.nome}}</h3>
+            <div class="container-sm text-center div-card-1">
+                <p>{{dadosRelatorios.mediaAlunosRespondentesCurso}}% dos alunos de {{curso.nome}} avaliaram o curso</p>
+            </div>
         </div>
         <div class="container-sm text-center div-card-1">
             <div class="form-group mx-auto">
@@ -84,6 +86,13 @@
                 </ul>
             </div>
         </div>
+        <div class="container container-info" style="margin-top: 30px">
+            <h2>Sugestões de IA</h2>
+            <a id=" linkIa" href="#" class="btn btn-primary" onclick="enviarObjeto()">Sugestões de IA</a>
+            <div class="row" style="padding-top: 10px;">
+                <label id="resultado"></label>
+            </div>
+        </div>
     </div>
 </body>
 <script>
@@ -104,5 +113,29 @@
         const operacaoId = '{{operacao_id}}';
         var link = document.getElementById("linkRelatorio");
         link.href = "/relatorio/relatorioDisciplina/" + disciplinaId + "/" + operacaoId;
-    }
+    };
+
+    function enviarObjeto() {
+        const dadosRelatorios = {
+            mediaAlunosDisciplina: '{{{json dadosRelatorios.mediaAlunosDisciplina}}}',
+            mediaAlunosCurso: '{{{json dadosRelatorios.mediaAlunosCurso}}}',
+            perguntasaQuestionario: '{{{json dadosRelatorios.perguntasQuestionario}}}',
+            mediaPorPerguntaDisciplina: '{{{json dadosRelatorios.mediaPorPerguntaDisciplina}}}'
+        }
+
+        fetch('/relatorio/indexCpa/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dadosRelatorios),
+        })
+            .then(response => response.json())
+            .then(data => {
+                const resultadoDiv = document.getElementById('resultado');
+                resultadoDiv.innerHTML = data.retornoPrompt.replace(/\n/g, '<br>');
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+    };
 </script>

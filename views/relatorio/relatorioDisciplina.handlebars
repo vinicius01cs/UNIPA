@@ -70,6 +70,13 @@
                 </ul>
             </div>
         </div>
+        <div class="container container-info" style="margin-top: 30px">
+            <h2>Sugestões de IA</h2>
+            <a id=" linkIa" href="#" class="btn btn-primary" onclick="enviarObjeto()">Sugestões de IA</a>
+            <div class="row" style="padding-top: 10px;">
+                <label id="resultado"></label>
+            </div>
+        </div>
     </div>
 </body>
 <script>
@@ -83,4 +90,28 @@
             this.textContent = "Recolher";
         }
     });
+
+    function enviarObjeto() {
+        const dadosRelatorios = {
+            mediaAlunosDisciplina: '{{{json dadosRelatorios.mediaAlunosDisciplina}}}',
+            mediaAlunosCurso: '{{{json dadosRelatorios.mediaAlunosCurso}}}',
+            perguntasaQuestionario: '{{{json dadosRelatorios.perguntasQuestionario}}}',
+            mediaPorPerguntaDisciplina: '{{{json dadosRelatorios.mediaPorPerguntaDisciplina}}}'
+        }
+
+        fetch('/relatorio/indexCpa/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dadosRelatorios),
+        })
+            .then(response => response.json())
+            .then(data => {
+                const resultadoDiv = document.getElementById('resultado');
+                resultadoDiv.innerHTML = data.retornoPrompt.replace(/\n/g, '<br>');
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
+    }
 </script>

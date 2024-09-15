@@ -137,7 +137,7 @@
             .then(response => response.json())
             .then(data => {
                 const resultadoDiv = document.getElementById('resultado');
-                resultadoDiv.innerHTML = data.x.replace(/\n/g, '<br>');
+                resultadoDiv.innerHTML = data.retornoPrompt.replace(/\n/g, '<br>');
             }).catch((error) => {
                 console.error('Error:', error);
             });

@@ -251,12 +251,9 @@ module.exports = class RelatorioController {
         try {
             const dadosRelatorios = req.body;
 
-            //const prompt = 'Com base nas informações desse json, considere como aumentar a participação de alunos nas pesquisas de cursos e de disciplinas, obs: informe a % de alunos que responderam o questionario  de curso e o questionario de disciplina'+ dadosRelatorios;
-            //const prompt2 = 'Voce Consegue analisar esse json e relacionar cada pergunta com resposta ? ' + JSON.stringify(dadosRelatorios);
             const prompt = 'Com base nas informações desse json, considere como aumentar a % de alunos que responderam o questionario de curso e o questionario de disciplina. Além disso, considerando que as notas vao de 0 a 5, baseado na pergunta e sua respectiva nota, apresente sugestões de melhorias para obter notas mais altas.' + JSON.stringify(dadosRelatorios);
-            const x = await OpenAIController.ConsultarGpt(prompt);
-            console.log(x);
-            res.json({x});
+            const retornoPrompt = await OpenAIController.ConsultarGpt(prompt);
+            res.json({retornoPrompt});
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: 'Erro ao consultar Gpt' });
