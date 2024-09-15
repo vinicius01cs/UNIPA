@@ -1,0 +1,59 @@
+<body>
+    <div class="container mt-5">
+        <h3>Chat entre Coordenador e Professor</h3>
+
+        <div id="chat-window" class="bg-light">
+            <ul id="messages"></ul>
+        </div>
+
+        <form id="form">
+            <input id="input" autocomplete="off" , placeholder="Digite sua mensagem" class="form-control" />
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    // IDs do coordenador e professor (passados pelo Handlebars)
+    const coordenador_id = {{ coordenador_id }};
+    const professor_id = {{ professor_id }};
+
+    // Conectar à sala específica
+    socket.emit('joinRoom', { coordenador_id, professor_id });
+
+    // Formulário para enviar mensagem
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messages = document.getElementById('messages');
+
+    // Enviar mensagem
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (input.value) {
+            // Envia a mensagem para o servidor
+            socket.emit('chatMessage', { coordenador_id, professor_id, message: input.value });
+
+            // Adiciona a mensagem no chat (do usuário)
+            addMessage(input.value, 'user');
+            input.value = '';
+        }
+    });
+
+    // Receber mensagem do servidor
+    socket.on('chatMessage', function (message) {
+        addMessage(message, 'other');
+    });
+
+    // Função para adicionar uma mensagem no chat
+    function addMessage(message, userType) {
+        const item = document.createElement('li');
+        item.textContent = message;
+        item.classList.add('message', userType);
+        messages.appendChild(item);
+
+        // Scroll para o fim da lista de mensagens
+        messages.scrollTop = messages.scrollHeight;
+    }
+</script>

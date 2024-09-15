@@ -5,9 +5,13 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const handlebars = require('handlebars');
 
-const port = 3000;
-
 const app = express();
+const socketIo = require('socket.io');
+const http = require('http');
+const server = http.createServer(app);
+const io = socketIo(server);
+
+const port = 3000;
 const conn = require('./db/conn');
 
 handlebars.registerHelper('checkUserLevel', function (userLevel, requiredLevel, options) {
@@ -31,7 +35,7 @@ handlebars.registerHelper('formatNumber', function (number) {
     return parseFloat(number).toFixed(2);
 });
 
-handlebars.registerHelper('json', function (context){
+handlebars.registerHelper('json', function (context) {
     return JSON.stringify(context);
 })
 
@@ -46,8 +50,7 @@ const disciplinaRoutes = require('./routes/disciplinaRoutes');
 const alunoRoutes = require('./routes/alunoRoutes');
 const relatorioRoutes = require('./routes/relatorioRoutes');
 const OpenAIRoutes = require('./routes/OpenAIRoutes');
-
-
+const chatRoutes = require('./routes/chatRoutes');
 
 const QuestionarioAluno = require('./models/QuestionarioAluno');
 const QuestionarioDisponilizado = require('./models/QuestionarioDisponibilizado');
@@ -92,9 +95,31 @@ app.use('/disciplina', disciplinaRoutes);
 app.use('/aluno', alunoRoutes);
 app.use('/relatorio', relatorioRoutes);
 app.use('/openAI', OpenAIRoutes);
+app.use('/chat', chatRoutes);
 app.use('/', homeRoutes);
+
+
+//configuracao do Sokect.Io para o chat 
+io.on('connection', (socket) => {
+    console.log('Novo usuário conectado');
+
+    socket.on('joinRoom', ({ coordenador_id, professor_id }) => {
+        const roomName = `chat_${coordenador_id}_${professor_id}`;
+        socket.join(roomName);
+        console.log(`Usuário entrou na sala ${roomName}`);
+    });
+
+    socket.on('chatMessage', ({ coordenador_id, professor_id, message }) => {
+        const roomName = `chat_${coordenador_id}_${professor_id}`;
+        io.to(roomName).emit('chatMessage', message); // Envia a mensagem para todos na sala
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Usuário desconectado');
+    });
+})
 
 conn
     .sync()
-    .then(() => { app.listen(port) })
+    .then(() => { server.listen(port) })
     .catch((err) => { console.log(err) });
