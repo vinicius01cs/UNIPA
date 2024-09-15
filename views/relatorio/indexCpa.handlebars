@@ -1,21 +1,28 @@
 <body>
-    <div class="container customForm">
-        <div class="container-sm text-center div-card-1" style="">
-            <h2>Relatorio Geral</h2>
-            <p>{{dadosRelatorios.mediaAlunosDisciplina}}% dos alunos da instituição avaliaram uma ou mais disciplinas
-                durante a avaliação.</p>
-            <p>{{dadosRelatorios.mediaAlunosCurso}}% dos alunos da instituição fizeram a avaliação do curso.</p>
-        </div>
-
-        <div class="form-group mx-auto">
-            <label>Visualizar Relatórios por Curso</label>
+    <div class="row">
+        <div style="margin-left: 30px;">
+            <h4>Visualizar Relatórios por Curso</h4>
             <select name="curso" id="curso" class="form-control form-control-sm d-block mb-2" required>
                 {{#each cursos}}
                 <option value="{{curso_id}}">{{nome}}</option>
                 {{/each}}
             </select>
-            <a id="linkRelatorio" href="#" class="btn btn-primary" onclick="aplicarFiltro()">Aplicar Filtro</a>
+            <a id="linkRelatorio" href="#" class="btn btn-primary" onclick="aplicarFiltro()">Aplicar
+                Filtro</a>
         </div>
+    </div>
+    <div class="row" style="padding-bottom: 20px;">
+        <div class="container text-center div-card-1" style="">
+            <h2>Relatorio Geral</h2>
+            <p>{{formatNumber dadosRelatorios.mediaAlunosDisciplina}}% dos alunos da instituição avaliaram uma ou
+                mais disciplinas
+                durante a avaliação.</p>
+            <p>{{formatNumber dadosRelatorios.mediaAlunosCurso}}% dos alunos da instituição fizeram a avaliação do
+                curso.</p>
+        </div>
+    </div>
+    
+    <div class="container text-center customForm">
 
         <div class="container-lg div_card_expandido text-center">
             <label>Média Geral da Instituição</label>
@@ -58,31 +65,38 @@
                         <label>Nota média</label>
                     </li>
                     <li class="list-group-item">
-                        <label>{{mResposta01}}</label>
+                        <label>{{formatNumber mResposta01}}</label>
                     </li>
                     <li class="list-group-item">
-                        <label>{{mResposta02}}</label>
+                        <label>{{formatNumber mResposta02}}</label>
                     </li>
                     <li class="list-group-item">
-                        <label>{{mResposta03}}</label>
+                        <label>{{formatNumber mResposta03}}</label>
                     </li>
                     <li class="list-group-item">
-                        <label>{{mResposta04}}</label>
+                        <label>{{formatNumber mResposta04}}</label>
                     </li>
                     <li class="list-group-item">
-                        <label>{{mResposta05}}</label>
+                        <label>{{formatNumber mResposta05}}</label>
                     </li>
                     <li class="list-group-item">
-                        <label>{{mResposta06}}</label>
+                        <label>{{formatNumber mResposta06}}</label>
                     </li>
                     <li class="list-group-item">
-                        <label>{{mResposta07}}</label>
+                        <label>{{formatNumber mResposta07}}</label>
                     </li>
                     <li class="list-group-item">
-                        <label>{{mResposta08}}</label>
+                        <label>{{formatNumber mResposta08}}</label>
                     </li>
                     {{/each}}
                 </ul>
+            </div>
+        </div>
+        <div class="container container-info" style="margin-top: 30px">
+            <h2>Sugestões de IA</h2>
+            <a id="linkIa" href="#" class="btn btn-primary" onclick="enviarObjeto()">Sugestões de IA</a>
+            <div class="row" style="padding-top: 10px;">
+                <label id="resultado"></label>
             </div>
         </div>
     </div>
@@ -104,5 +118,28 @@
         const operacaoId = '{{operacao_id}}';
         var link = document.getElementById("linkRelatorio");
         link.href = "/relatorio/relatorioCurso/" + cursoId + "/" + operacaoId;
+    }
+    function enviarObjeto() {
+        const dadosRelatorios = {
+            mediaAlunosDisciplina: '{{{json dadosRelatorios.mediaAlunosDisciplina}}}',
+            mediaAlunosCurso: '{{{json dadosRelatorios.mediaAlunosCurso}}}',
+            perguntasaQuestionario: '{{{json dadosRelatorios.perguntasQuestionario}}}',
+            mediaPorPerguntaDisciplina: '{{{json dadosRelatorios.mediaPorPerguntaDisciplina}}}'
+        }
+
+        fetch('/relatorio/indexCpa/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(dadosRelatorios),
+        })
+            .then(response => response.json())
+            .then(data => {
+                const resultadoDiv = document.getElementById('resultado');
+                resultadoDiv.innerHTML = data.retornoPrompt.replace(/\n/g, '<br>');
+            }).catch((error) => {
+                console.error('Error:', error);
+            });
     }
 </script>

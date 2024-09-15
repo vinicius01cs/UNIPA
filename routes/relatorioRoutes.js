@@ -10,4 +10,5 @@ router.get('/relatorioCurso/:curso_id/:operacao_id', authMiddleware, checkUserLe
 router.get('/relatorioDisciplina/:disciplina_id/:operacao_id', authMiddleware, checkUserLevel([1, 2, 3]), relatorioController.RelatorioDisciplina);
 //router.get('/relatorioDisciplina/:disciplina_id/:operacao_id', authMiddleware, checkUserLevel([1]), relatorioController.RelatorioDisciplina);
 
+router.post('/indexCpa/', relatorioController.ConsultarGpt);
 module.exports = router;

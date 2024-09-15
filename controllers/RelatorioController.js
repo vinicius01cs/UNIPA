@@ -11,6 +11,7 @@ const Curso = require('../models/Curso');
 const Disciplina = require('../models/Disciplina');
 const DisciplinaCurso = require('../models/DisciplinaCurso');
 
+const OpenAIController = require('./OpenAIController');
 require('dotenv').config()
 
 module.exports = class RelatorioController {
@@ -45,7 +46,6 @@ module.exports = class RelatorioController {
                 perguntasQuestionario: perguntasQuestionario,
                 mediaPorPerguntaDisciplina: mediaPorPerguntaDisciplina,
             }
-
             res.render('relatorio/indexCpa', { dadosRelatorios, cursos, operacao_id: req.params.id });
         } catch (error) {
             console.log(error);
@@ -60,7 +60,8 @@ module.exports = class RelatorioController {
                 where: {
                     curso_id: req.params.curso_id
                 }
-            })
+            });
+
             const questionarioCurso = await QuestionarioCurso.findAll({
                 where: {
                     operacao_id: req.params.operacao_id,
@@ -244,5 +245,18 @@ module.exports = class RelatorioController {
             }
         });
         return respostas;
+    }
+
+    static async ConsultarGpt(req, res) {
+        try {
+            const dadosRelatorios = req.body;
+
+            const prompt = 'Com base nas informações desse json, considere como aumentar a % de alunos que responderam o questionario de curso e o questionario de disciplina. Além disso, considerando que as notas vao de 0 a 5, baseado na pergunta e sua respectiva nota, apresente sugestões de melhorias para obter notas mais altas.' + JSON.stringify(dadosRelatorios);
+            const retornoPrompt = await OpenAIController.ConsultarGpt(prompt);
+            res.json({retornoPrompt});
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Erro ao consultar Gpt' });
+        }
     }
 }
