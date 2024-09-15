@@ -4,4 +4,5 @@ const router = express.Router();
 
 router.get('/consultarGpt', OpenAIController.ConsultarGpt);
 
+
 module.exports = router;

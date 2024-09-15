@@ -27,6 +27,14 @@ handlebars.registerHelper('checkUsuarioLogado', function (user, options) {
 
 });
 
+handlebars.registerHelper('formatNumber', function (number) {
+    return parseFloat(number).toFixed(2);
+});
+
+handlebars.registerHelper('json', function (context){
+    return JSON.stringify(context);
+})
+
 const questionarioRoutes = require('./routes/questionarioRoutes');
 const planilhaRoutes = require('./routes/planilhaRoutes');
 const homeRoutes = require('./routes/homeRoutes');
@@ -55,6 +63,7 @@ const Aluno = require('./models/Aluno');
 const Respostas = require('./models/Respostas');
 const RespostasCurso = require('./models/RespostasCurso');
 const QuestionarioCurso = require('./models/QuestionarioCurso');
+const { parse } = require('dotenv');
 
 require('./config/passport');
 

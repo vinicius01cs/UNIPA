@@ -144,3 +144,14 @@ input[type="file"] {
 .div-card-1 h2{
     padding-bottom: 15px;
 }
+
+.container-info {
+    justify-content: center;
+    border-radius: 25px;
+    background-color: #b2d9f7;
+}
+
+.navbar-style{
+    background-color: #487aa1;
+    color: white;
+}
