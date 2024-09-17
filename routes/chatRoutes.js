@@ -5,6 +5,6 @@ const ChatController = require('../controllers/ChatController')
 
 router.get('/indexCoordenador', authMiddleware, checkUserLevel([2,3]), ChatController.IndexCoordenador);
 
-router.get('/chat/:coordenador_id/:professor_id', authMiddleware, checkUserLevel([2,3]), ChatController.Chat);
+router.get('/chat/:coordenador_Userid/:professor_Userid', authMiddleware, checkUserLevel([2,3]), ChatController.Chat);
 
 module.exports = router;

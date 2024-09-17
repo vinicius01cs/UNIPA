@@ -66,7 +66,10 @@ const Aluno = require('./models/Aluno');
 const Respostas = require('./models/Respostas');
 const RespostasCurso = require('./models/RespostasCurso');
 const QuestionarioCurso = require('./models/QuestionarioCurso');
+const Chat = require('./models/Chat');
 const { parse } = require('dotenv');
+const ChatController = require('./controllers/ChatController');
+const UsuarioController = require('./controllers/UsuarioController');
 
 require('./config/passport');
 
@@ -98,26 +101,9 @@ app.use('/openAI', OpenAIRoutes);
 app.use('/chat', chatRoutes);
 app.use('/', homeRoutes);
 
+//UsuarioController.CriarUsuarioCasoNecessario();
 
-//configuracao do Sokect.Io para o chat 
-io.on('connection', (socket) => {
-    console.log('Novo usuário conectado');
-
-    socket.on('joinRoom', ({ coordenador_id, professor_id }) => {
-        const roomName = `chat_${coordenador_id}_${professor_id}`;
-        socket.join(roomName);
-        console.log(`Usuário entrou na sala ${roomName}`);
-    });
-
-    socket.on('chatMessage', ({ coordenador_id, professor_id, message }) => {
-        const roomName = `chat_${coordenador_id}_${professor_id}`;
-        io.to(roomName).emit('chatMessage', message); // Envia a mensagem para todos na sala
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Usuário desconectado');
-    });
-})
+ChatController.configureSocketIO(io);
 
 conn
     .sync()

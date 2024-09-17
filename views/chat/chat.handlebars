@@ -12,16 +12,35 @@
         </form>
     </div>
 </body>
+
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
     const socket = io();
+    let loggedUserId = "{{userId}}";
+    let coordenadorUserId = "{{coordenador_Userid}}"
+    let professorUserId = "{{professor_Userid}}"
+    let remetente_id = null;
+    let destinatario_id = null;
+    let remetente = null
+    console.log('userId logado', loggedUserId, 'coordenadorUserId', coordenadorUserId, 'professorUserId', professorUserId)
 
+    if (coordenadorUserId === loggedUserId) {
+        remetente_id = parseInt(coordenadorUserId);
+        destinatario_id = parseInt(professorUserId);
+        remetente = remetente_id;
+    } else if (professorUserId === loggedUserId) {
+        remetente_id = parseInt(professorUserId);
+        destinatario_id = parseInt(coordenadorUserId);
+        remetente = remetente_id;
+    }
+    
+    console.log(remetente_id, destinatario_id, remetente)
     // IDs do coordenador e professor (passados pelo Handlebars)
-    const coordenador_id = {{ coordenador_id }};
-    const professor_id = {{ professor_id }};
-
+    const coordenador_id = "{{ coordenador_id }}";
+    const professor_id = "{{ professor_id }}";
     // Conectar à sala específica
-    socket.emit('joinRoom', { coordenador_id, professor_id });
+    socket.emit('joinRoom', { coordenadorUserId, professorUserId });
 
     // Formulário para enviar mensagem
     const form = document.getElementById('form');
@@ -33,8 +52,7 @@
         e.preventDefault();
         if (input.value) {
             // Envia a mensagem para o servidor
-            socket.emit('chatMessage', { coordenador_id, professor_id, message: input.value });
-
+            socket.emit('chatMessage', { remetente_id, destinatario_id, message: input.value, coordenadorUserId, professorUserId });
             // Adiciona a mensagem no chat (do usuário)
             addMessage(input.value, 'user');
             input.value = '';
@@ -46,9 +64,18 @@
         addMessage(message, 'other');
     });
 
+    socket.on('previousMessages', function (messages) {
+        
+        messages.forEach(({ remetente_id, message }) => {
+            const messageType = parseInt(remetente_id) === parseInt(loggedUserId) ? 'user' : 'other';
+            addMessage(message, messageType);
+        });
+    });
+
     // Função para adicionar uma mensagem no chat
     function addMessage(message, userType) {
         const item = document.createElement('li');
+        item.textContent = '';
         item.textContent = message;
         item.classList.add('message', userType);
         messages.appendChild(item);

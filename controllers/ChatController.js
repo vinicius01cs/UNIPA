@@ -3,6 +3,8 @@ const Curso = require('../models/Curso');
 const Professor = require('../models/Professor');
 const DisciplinaCurso = require('../models/disciplinaCurso');
 const Disciplina = require('../models/Disciplina');
+const Chat = require('../models/Chat');
+const { Op } = require('sequelize');
 
 require('dotenv').config()
 
@@ -42,11 +44,88 @@ module.exports = class ChatController {
 
     static async Chat(req, res) {
         try {
-            const { coordenador_id, professor_id } = req.params;
-            res.render('chat/chat', { coordenador_id, professor_id });
+            const { coordenador_Userid, professor_Userid } = req.params;
+            const userId = req.user.id
+            console.log(req.user.id);
+            const professor = await Professor.findOne({ raw: true, where: { usuario_id: req.user.id } });
+            const coordenador = await Coordenador.findOne({ raw: true, where: { usuario_id: req.user.id } });
+            //console.log(coordenador.coordenador_id);
+            let user = null
+            let userRole = null
+
+
+            if (professor) {
+                userRole = 'professor'
+                user = professor
+            } else if (coordenador) {
+                userRole = 'coordenador'
+                user = coordenador
+            } else {
+                return res.status(404).json({ message: 'Usuário não encontrado' })
+            }
+            //console.log('Mensagens:', messages);
+            res.render('chat/chat', { coordenador_Userid, professor_Userid, user, userRole, professor, coordenador, userId });
         } catch (err) {
             console.log(err);
             res.status(500).json({ message: 'deu pau' });
         }
+    }
+
+    static async GetMessages(remetente_id, destinatario_id) {
+        try {
+            const msgs = await Chat.findAll({
+                raw: true,
+                where: {
+                    [Op.or]: [
+                        { remetente_id, destinatario_id },
+                        { remetente_id: destinatario_id, destinatario_id: remetente_id }
+                    ]
+                },
+                order: [['data_envio', 'ASC']]
+            });
+            return msgs;
+        }
+        catch (err) {
+            console.log(err);
+            throw err;
+        }
+    }
+
+    static configureSocketIO(io) {
+        io.on('connection', (socket) => {
+            console.log('Novo usuário conectado');
+
+            socket.on('joinRoom', async ({ coordenadorUserId, professorUserId }) => {
+                const roomName = `chat_${coordenadorUserId}_${professorUserId}`;
+                socket.join(roomName);
+
+                try {
+                    const messages = await ChatController.GetMessages(coordenadorUserId, professorUserId);
+                    socket.emit('previousMessages', messages);
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+
+            socket.on('chatMessage', async ({ remetente_id, destinatario_id, message, coordenadorUserId, professorUserId }) => {
+                const roomName = `chat_${coordenadorUserId}_${professorUserId}`;
+                io.to(roomName).emit('chatMessage', message); // Envia a mensagem para todos na sala
+
+                await Chat.create({
+                    remetente_id,
+                    destinatario_id,
+                    message,
+                });
+            })
+
+            socket.on('previousMessages', async ({ remetente_id, destinatario_id }) => {
+                const messages = await ChatController.GetMessages(remetente_id, destinatario_id);
+                socket.emit('previousMessages', messages);
+            })
+
+            socket.on('disconnect', () => {
+                console.log('Usuário desconectado');
+            })
+        });
     }
 }

@@ -128,7 +128,7 @@ input[type="file"] {
     /* Ajuste este valor de acordo com o conteúdo */
 }
 
-.div_card_expandido{
+.div_card_expandido {
     border-color: black;
     border-radius: 25px;
     padding: 10px;
@@ -136,12 +136,12 @@ input[type="file"] {
     margin-top: 30px;
 }
 
-.div-card-1{
+.div-card-1 {
     margin-top: 20px;
     padding: 10px;
 }
 
-.div-card-1 h2{
+.div-card-1 h2 {
     padding-bottom: 15px;
 }
 
@@ -151,7 +151,56 @@ input[type="file"] {
     background-color: #b2d9f7;
 }
 
-.navbar-style{
+.navbar-style {
     background-color: #487aa1;
     color: white;
+}
+
+#chat-window {
+    max-height: 400px;
+    /* Define a altura máxima da área de chat */
+    overflow-y: auto;
+    /* Adiciona rolagem vertical quando necessário */
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+#messages {
+    list-style-type: none;
+    /* Remove os marcadores da lista */
+    padding: 0;
+    margin: 0;
+}
+
+.message {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 60%;
+    word-wrap: break-word;
+}
+
+.message.user {
+    background-color: #d1e7dd;
+    align-self: flex-end;
+    /* Alinha mensagens do usuário à direita */
+    margin-left: auto;
+}
+
+.message.other {
+    background-color: #f8d7da;
+    align-self: flex-start;
+    /* Alinha mensagens do outro usuário à esquerda */
+    margin-right: auto;
+}
+
+#form {
+    display: flex;
+    margin-top: 10px;
+}
+
+#input {
+    flex: 1;
+    margin-right: 10px;
 }

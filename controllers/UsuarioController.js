@@ -121,4 +121,15 @@ module.exports = class UsuarioController {
             console.error(error);
         }
     }
+
+    static CriarUsuarioCasoNecessario(){
+        const usuarioExistente = Usuario.findOne(); 
+        const usuario = new Usuario({
+            usuarioMatricula: '123', email: 'admin@unipa.com', tipoUsuario: 1, nome: 'admin', sobrenome: 'unipa'
+        });
+        if(!usuarioExistente){
+            usuario.setPassword('123');
+        }
+        usuario.save();
+    }
 }
