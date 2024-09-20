@@ -42,6 +42,33 @@ module.exports = class ChatController {
         }
     }
 
+    static async IndexProfessor(req, res){
+        try{
+            const professor = await Professor.findOne({ raw: true, where: { usuario_id: req.user.id } });
+            const disciplina = await Disciplina.findAll({ raw: true, where: { professor_id: professor.professor_id } });
+            const disciplinasId = disciplina.map((disciplina) => disciplina.disciplina_id);
+            const disciplinaCurso = await DisciplinaCurso.findAll({ raw: true, where: { disciplina_id: disciplinasId } });
+            const cursoId = disciplinaCurso.map((disciplinaCurso) => disciplinaCurso.curso_id);
+            const cursos = await Curso.findAll({ raw: true, where: { curso_id: cursoId } });
+            const coordenadoresId = cursos.map((curso) => curso.coordenador_id);
+            const coordenadores = await Coordenador.findAll({ raw: true, where: { coordenador_id: coordenadoresId } });
+
+            const cursosComCoordenadores = cursos.map((curso) => {
+                const coordenador = coordenadores.find((coord) => String(coord.coordenador_id) === String(curso.coordenador_id));
+                return {
+                    ...curso,
+                    coordenador: coordenador ? coordenador : 'Coordenador não encontrado' // ou qualquer campo relevante do coordenador
+                };
+            });
+
+            console.log('Cursos com coordenadores:', cursosComCoordenadores);
+            res.render('chat/indexProfessor', {cursos, professor, cursosComCoordenadores});
+        }catch(err){
+            console.log(err);
+            res.status(500).json({ message: 'deu pau' });
+        }
+    }
+
     static async Chat(req, res) {
         try {
             const { coordenador_Userid, professor_Userid } = req.params;
