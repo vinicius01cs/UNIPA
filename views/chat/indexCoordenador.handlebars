@@ -1,0 +1,23 @@
+<div class="tab-container">
+    <table class="table">
+        <thread>
+            <tr>
+                <th scope="col">Disciplina ID</th>
+                <th scope="col">Disciplina</th>
+                <th scope="col">Professor</th>
+                <th scope="col">Sigla</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{#each disciplinasComProfessores}}
+            <tr>
+                <td>{{this.disciplina_id}}</td>
+                <td>{{this.nome}}</td>
+                <td>{{this.professor.nome}}</td>
+                <td>{{this.sigla_disciplina}}</td>
+                <td><a href="chat/{{../coordenador.usuario_id}}/{{this.professor.usuario_id}}" class="btn btn-primary btn-sm active">Conversar</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

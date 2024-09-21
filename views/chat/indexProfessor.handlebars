@@ -1,0 +1,20 @@
+<div class="tab-container">
+    <table class="table">
+        <thread>
+            <tr>
+                <th scope="col">Curso</th>
+                <th scope="col">Coordenador</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{#each cursosComCoordenadores}}
+            <tr>
+                <td>{{this.nome}}</td>
+                <td>{{this.coordenador.nome}}</td>
+                <td><a href="chat/{{this.coordenador.usuario_id}}/{{../professor.usuario_id}}"
+                        class="btn btn-primary btn-sm active">Conversar</a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
