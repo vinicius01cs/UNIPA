@@ -27,7 +27,21 @@ function checkUserLevel(tipoUsuario) {
     }
 }
 
+function authorizeChatAcess(req, res, next) {
+    const coordenadorUserId = parseInt(req.params.coordenador_Userid);
+    const professorUserId = parseInt(req.params.professor_Userid);
+    const userId = parseInt(req.user.id);
+
+    if (userId === coordenadorUserId || userId === professorUserId) {
+        return next();
+    }
+    else {
+        return res.status(403).send('Você não tem permissão para acessar essa página');
+    }
+}
+
 module.exports = {
     authMiddleware,
-    checkUserLevel
+    checkUserLevel,
+    authorizeChatAcess
 };
