@@ -75,14 +75,11 @@ module.exports = class UsuarioController {
         }
     }
 
-    //todo - arrumar funcao de deletar usuario
     static async DeletarUsuario(req, res) {
         try {
             const id = req.params.id;
-            const usuario = await usuario.findOne({ raw: true, where: { usuario_id: id } });
-
-            console.log(usuario);
-            /*
+            const usuario = await Usuario.findOne({ raw: true, where: { usuario_id: id } });
+            
             if (usuario.tipoUsuario == 2) {
                 await Professor.destroy({ where: { usuario_id: id } });
             }
@@ -92,10 +89,8 @@ module.exports = class UsuarioController {
             else if (usuario.tipoUsuario == 4) {
                 await Aluno.destroy({ where: { usuario_id: id } });
             }
-*/
-
             await Usuario.destroy({ where: { usuario_id: id } });
-            res.redirect('/');
+            res.redirect('/usuario/index');
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -118,7 +113,7 @@ module.exports = class UsuarioController {
             }
         }
         catch (error) {
-            console.error(error);
+            res.status(500).json({ message: error.message });
         }
     }
 

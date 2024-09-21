@@ -228,7 +228,7 @@ module.exports = class QuestionarioController {
                 }
             });
 
-            res.redirect('/');
+            res.redirect('/questionario/index');
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: 'deu pau aqui' });
@@ -253,7 +253,7 @@ module.exports = class QuestionarioController {
                 }
             });
 
-            res.redirect('/');
+            res.redirect('/questionario/index');
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: 'deu pau' });
@@ -269,7 +269,7 @@ module.exports = class QuestionarioController {
                 pergunta_05: pergunta05, pergunta_06: pergunta06, pergunta_07: pergunta07, pergunta_08: pergunta08
             });
 
-            res.redirect('/');
+            res.redirect('/questionario/index');
         } catch (error) {
             res.status(500).json({ message: 'Erro ao criar questionario' });
         }
@@ -304,7 +304,7 @@ module.exports = class QuestionarioController {
             const id = req.params.id;
 
             await Questionario.destroy({ where: { questionario_id: id } });
-            res.redirect('/');
+            res.redirect('/questionario/index');
         } catch (error) {
             res.status(500).json({ message: 'Erro ao deletar questionario' });
         }
