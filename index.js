@@ -107,5 +107,8 @@ ChatController.configureSocketIO(io);
 
 conn
     .sync()
-    .then(() => { server.listen(port) })
+    .then(async () => {
+        await UsuarioController.CriarUsuarioCasoNecessario();
+        server.listen(port);
+    })
     .catch((err) => { console.log(err) });

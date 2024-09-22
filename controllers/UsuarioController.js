@@ -79,7 +79,7 @@ module.exports = class UsuarioController {
         try {
             const id = req.params.id;
             const usuario = await Usuario.findOne({ raw: true, where: { usuario_id: id } });
-            
+
             if (usuario.tipoUsuario == 2) {
                 await Professor.destroy({ where: { usuario_id: id } });
             }
@@ -117,14 +117,22 @@ module.exports = class UsuarioController {
         }
     }
 
-    static CriarUsuarioCasoNecessario(){
-        const usuarioExistente = Usuario.findOne(); 
-        const usuario = new Usuario({
-            usuarioMatricula: '123', email: 'admin@unipa.com', tipoUsuario: 1, nome: 'admin', sobrenome: 'unipa'
-        });
-        if(!usuarioExistente){
-            usuario.setPassword('123');
+    static async CriarUsuarioCasoNecessario() {
+        try {
+            const usuarioExistente = await Usuario.findOne();
+            if (!usuarioExistente) {
+                console.log('Criando usuario admin');
+                const usuario = new Usuario({
+                    usuarioMatricula: '123', email: 'admin@unipa.com', tipoUsuario: 1, nome: 'admin', sobrenome: 'unipa'
+                });
+                usuario.setPassword('123');
+
+                usuario.save();
+            }
         }
-        usuario.save();
+        catch (error) {
+            console.error(error.message);
+            console.error(error.stack);
+        }
     }
 }
