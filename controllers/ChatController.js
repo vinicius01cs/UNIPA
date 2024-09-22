@@ -1,7 +1,7 @@
 const Coordenador = require('../models/Coordenador');
 const Curso = require('../models/Curso');
 const Professor = require('../models/Professor');
-const DisciplinaCurso = require('../models/disciplinaCurso');
+const DisciplinaCurso = require('../models/DisciplinaCurso');
 const Disciplina = require('../models/Disciplina');
 const Chat = require('../models/Chat');
 const { Op } = require('sequelize');
