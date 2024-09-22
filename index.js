@@ -4,6 +4,8 @@ const jsonwebtoken = require('jsonwebtoken');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const handlebars = require('handlebars');
+const path = require('path');
+
 
 const app = express();
 const socketIo = require('socket.io');
@@ -76,6 +78,7 @@ require('./config/passport');
 app.engine('handlebars', exphbs.engine());
 app.set('view engine', 'handlebars');
 
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static('public'));
@@ -85,7 +88,11 @@ app.use(session({
     secret: 'secret',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false } //set to true for https
+    cookie: { 
+        secure: true, 
+        sameSite: 'strict' // protecao contra csrf
+    } //set to true for https
+    
 }));
 
 app.use('/enviar-email', enviarEmailRouter);
@@ -101,7 +108,6 @@ app.use('/openAI', OpenAIRoutes);
 app.use('/chat', chatRoutes);
 app.use('/', homeRoutes);
 
-//UsuarioController.CriarUsuarioCasoNecessario();
 
 ChatController.configureSocketIO(io);
 
