@@ -58,10 +58,8 @@ module.exports = class QuestionarioController {
                     questionarioCurso: questionarioCursos
                 }
             })
-
             req.session.dadosCombinados = dadosCombinados;
             req.session.dadosCombinadosCurso = dadosCombinadosCurso;
-            console.log(dadosCombinados);
             res.render('questionario/indexQuestionariosNaoRespondidos', { dadosCombinados, dadosCombinadosCurso });
         } catch (error) {
             console.log(error);
@@ -179,7 +177,7 @@ module.exports = class QuestionarioController {
 
             const questionario = await Questionario.findOne({ raw: true, where: { questionario_id } });
             const dadosCombinados = req.session.dadosCombinados;
-
+            console.log(dadosCombinados);
             if (!dadosCombinados) {
                 return res.status(500).json({ message: 'Não foi possível encontrar os dados combinados' });
             } else {
