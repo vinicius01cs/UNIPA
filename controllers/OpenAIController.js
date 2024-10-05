@@ -13,7 +13,7 @@ module.exports = class OpenAIController {
     static async ConsultarGpt(prompt) {
         try {
             const completion = await openai.chat.completions.create({
-                model: "chatgpt-4o-latest",
+                model: "gpt-3.5-turbo-0125",
                 messages: [{ role: 'user', content: prompt }],
             });
 
