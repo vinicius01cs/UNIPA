@@ -81,8 +81,8 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static('public'));
-//app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static('public'));
+
 app.use(express.json());
 
 app.use(session({
@@ -108,7 +108,7 @@ app.use('/openAI', OpenAIRoutes);
 app.use('/chat', chatRoutes);
 app.use('/', homeRoutes);
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 ChatController.configureSocketIO(io);
 
 conn
