@@ -39,12 +39,35 @@ module.exports = class RelatorioController {
             const mediaAlunosCurso = await RelatorioController.CalcularMediaAlunosRespondentesCurso(questionarioCurso);
             const perguntasQuestionario = await RelatorioController.ObterPerguntasQuestionario(req.params.id);
             const mediaPorPerguntaDisciplina = await RelatorioController.ObterMediaPorPerguntaDisciplina(req.params.id);
+            const dadosConjuntos = perguntasQuestionario.map((pergunta, index) => ({
+                perguntas: {
+                    pergunta_01: pergunta.pergunta_01,
+                    pergunta_02: pergunta.pergunta_02,
+                    pergunta_03: pergunta.pergunta_03,
+                    pergunta_04: pergunta.pergunta_04,
+                    pergunta_05: pergunta.pergunta_05,
+                    pergunta_06: pergunta.pergunta_06,
+                    pergunta_07: pergunta.pergunta_07,
+                    pergunta_08: pergunta.pergunta_08
+                },
+                medias: {
+                    media_01: mediaPorPerguntaDisciplina[index].mResposta01,
+                    media_02: mediaPorPerguntaDisciplina[index].mResposta02,
+                    media_03: mediaPorPerguntaDisciplina[index].mResposta03,
+                    media_04: mediaPorPerguntaDisciplina[index].mResposta04,
+                    media_05: mediaPorPerguntaDisciplina[index].mResposta05,
+                    media_06: mediaPorPerguntaDisciplina[index].mResposta06,
+                    media_07: mediaPorPerguntaDisciplina[index].mResposta07,
+                    media_08: mediaPorPerguntaDisciplina[index].mResposta08,
+                }
+            }));
 
             const dadosRelatorios = {
                 mediaAlunosDisciplina: mediaAlunosDisciplina,
                 mediaAlunosCurso: mediaAlunosCurso,
                 perguntasQuestionario: perguntasQuestionario,
                 mediaPorPerguntaDisciplina: mediaPorPerguntaDisciplina,
+                dadosConjuntos: dadosConjuntos
             }
             res.render('relatorio/indexCpa', { dadosRelatorios, cursos, operacao_id: req.params.id });
         } catch (error) {
@@ -90,10 +113,34 @@ module.exports = class RelatorioController {
             const mediaPorPerguntaCurso = await RelatorioController.ObterMediaPorPerguntaCurso(req.params.operacao_id, req.params.curso_id,);
             const CalcularMediaAlunosRespondentesCurso = await RelatorioController.CalcularMediaAlunosRespondentesCurso(questionarioCurso, req.params.curso_id);
 
+            const dadosConjuntos = perguntasQuestionario.map((pergunta, index) => ({
+                perguntas: {
+                    pergunta_01: pergunta.pergunta_01,
+                    pergunta_02: pergunta.pergunta_02,
+                    pergunta_03: pergunta.pergunta_03,
+                    pergunta_04: pergunta.pergunta_04,
+                    pergunta_05: pergunta.pergunta_05,
+                    pergunta_06: pergunta.pergunta_06,
+                    pergunta_07: pergunta.pergunta_07,
+                    pergunta_08: pergunta.pergunta_08
+                },
+                medias: {
+                    media_01: mediaPorPerguntaCurso[index].mResposta01,
+                    media_02: mediaPorPerguntaCurso[index].mResposta02,
+                    media_03: mediaPorPerguntaCurso[index].mResposta03,
+                    media_04: mediaPorPerguntaCurso[index].mResposta04,
+                    media_05: mediaPorPerguntaCurso[index].mResposta05,
+                    media_06: mediaPorPerguntaCurso[index].mResposta06,
+                    media_07: mediaPorPerguntaCurso[index].mResposta07,
+                    media_08: mediaPorPerguntaCurso[index].mResposta08,
+                }
+            }));
+
             const dadosRelatorios = {
                 perguntasQuestionario: perguntasQuestionario,
                 mediaPorPerguntaCurso: mediaPorPerguntaCurso,
-                mediaAlunosRespondentesCurso: CalcularMediaAlunosRespondentesCurso
+                mediaAlunosRespondentesCurso: CalcularMediaAlunosRespondentesCurso,
+                dadosConjuntos: dadosConjuntos
             }
 
             res.render('relatorio/relatorioCurso', { dadosRelatorios, curso, disciplinas, operacao_id: req.params.operacao_id });
@@ -114,10 +161,33 @@ module.exports = class RelatorioController {
 
             const perguntasQuestionario = await RelatorioController.ObterPerguntasQuestionario(req.params.operacao_id);
             const mediaPorPerguntaDisciplina = await RelatorioController.ObterMediaPorPerguntaDisciplina(req.params.operacao_id, req.params.disciplina_id);
+            const dadosConjuntos = perguntasQuestionario.map((pergunta, index) => ({
+                perguntas: {
+                    pergunta_01: pergunta.pergunta_01,
+                    pergunta_02: pergunta.pergunta_02,
+                    pergunta_03: pergunta.pergunta_03,
+                    pergunta_04: pergunta.pergunta_04,
+                    pergunta_05: pergunta.pergunta_05,
+                    pergunta_06: pergunta.pergunta_06,
+                    pergunta_07: pergunta.pergunta_07,
+                    pergunta_08: pergunta.pergunta_08
+                },
+                medias: {
+                    media_01: mediaPorPerguntaDisciplina[index].mResposta01,
+                    media_02: mediaPorPerguntaDisciplina[index].mResposta02,
+                    media_03: mediaPorPerguntaDisciplina[index].mResposta03,
+                    media_04: mediaPorPerguntaDisciplina[index].mResposta04,
+                    media_05: mediaPorPerguntaDisciplina[index].mResposta05,
+                    media_06: mediaPorPerguntaDisciplina[index].mResposta06,
+                    media_07: mediaPorPerguntaDisciplina[index].mResposta07,
+                    media_08: mediaPorPerguntaDisciplina[index].mResposta08,
+                }
+            }));
 
             const dadosRelatorios = {
                 perguntasQuestionario: perguntasQuestionario,
-                mediaPorPerguntaDisciplina: mediaPorPerguntaDisciplina
+                mediaPorPerguntaDisciplina: mediaPorPerguntaDisciplina,
+                dadosConjuntos: dadosConjuntos
             }
 
             res.render('relatorio/relatorioDisciplina', { dadosRelatorios, disciplina });
@@ -253,7 +323,7 @@ module.exports = class RelatorioController {
 
             const prompt = 'Com base nas informações desse json, considere como aumentar a % de alunos que responderam o questionario de curso e o questionario de disciplina. Além disso, considerando que as notas vao de 0 a 5, baseado na pergunta e sua respectiva nota, apresente sugestões de melhorias para obter notas mais altas.' + JSON.stringify(dadosRelatorios);
             const retornoPrompt = await OpenAIController.ConsultarGpt(prompt);
-            res.json({retornoPrompt});
+            res.json({ retornoPrompt });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: 'Erro ao consultar Gpt' });

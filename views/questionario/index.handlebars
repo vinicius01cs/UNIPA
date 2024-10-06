@@ -1,38 +1,53 @@
 <div class="container text-center">
-    <table class="table">
-        <thread>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nome</th>
-                <th scope="col">Pergunta 1</th>
-                <th scope="col">Pergunta 2</th>
-                <th scope="col">Pergunta 3</th>
-                <th scope="col">Pergunta 4</th>
-                <th scope="col">Pergunta 5</th>
-                <th scope="col">Pergunta 6</th>
-                <th scope="col">Pergunta 7</th>
-                <th scope="col">Pergunta 8</th>
-                <th scope="col">Editar</th>
-                <th scope="col">Excluir</th>
-            </tr>
-        </thread>
-        <tbody>
-            {{#each questionarios}}
-            <tr>
-                <td>{{this.questionario_id}}</td>
-                <td>{{this.nome}}</td>
-                <td>{{this.pergunta_01}}</td>
-                <td>{{this.pergunta_02}}</td>
-                <td>{{this.pergunta_03}}</td>
-                <td>{{this.pergunta_04}}</td>
-                <td>{{this.pergunta_05}}</td>
-                <td>{{this.pergunta_06}}</td>
-                <td>{{this.pergunta_07}}</td>
-                <td>{{this.pergunta_08}}</td>
-                <td><a href="/questionario/editarQuestionario/{{this.questionario_id}}" class="btn btn-primary btn-sm active">Editar</a></td>
-                <td><a href="/questionario/DeletarQuestionario/{{this.questionario_id}}" class="btn btn-primary btn-sm active">Excluir</a></td>
-            </tr>
-            {{/each}}
-        </tbody>
-    </table>
+    <div class="container">
+        {{#each questionarios}}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Questionario - {{this.nome}}</h5>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td class="colunaPergunta">Pergunta 1</td>
+                            <td>{{this.pergunta_01}}</td>
+                        </tr>
+                        <tr>
+                            <td class="colunaPergunta">Pergunta 2</td>
+                            <td>{{this.pergunta_02}}</td>
+                        </tr>
+                        <tr>
+                            <td class="colunaPergunta">Pergunta 3</td>
+                            <td>{{this.pergunta_03}}</td>
+                        </tr>
+                        <tr>
+                            <td class="colunaPergunta">Pergunta 4</td>
+                            <td>{{this.pergunta_04}}</td>
+                        </tr>
+                        <tr>
+                            <td class="colunaPergunta">Pergunta 5</td>
+                            <td>{{this.pergunta_05}}</td>
+                        </tr>
+                        <tr>
+                            <td class="colunaPergunta">Pergunta 6</td>
+                            <td>{{this.pergunta_06}}</td>
+                        </tr>
+                        <tr>
+                            <td class="colunaPergunta">Pergunta 7</td>
+                            <td>{{this.pergunta_07}}</td>
+                        </tr>
+                        <tr>
+                            <td class="colunaPergunta">Pergunta 8</td>
+                            <td>{{this.pergunta_08}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <a href="/questionario/editarQuestionario/{{this.questionario_id}}"
+                    class="btn btn-primary btn-sm active">Editar</a>
+                <a href="/questionario/DeletarQuestionario/{{this.questionario_id}}"
+                    class="btn btn-primary btn-sm active">Excluir</a>
+            </div>
+        </div>
+        {{/each}}
+    </div>
 </div>
