@@ -12,20 +12,20 @@
 
 <body>
     {{#checkUsuarioLogado user}}
-    <nav class="navbar navbar-expand-lg navbar-light navbar-style">
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-style" >
+        <div class="collapse navbar-collapse" id="navbarNavDropdown" >
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Inicio<span class="visually-hidden">(Página atual)</span></a>
+                    <a class="nav-link navlink-font" href="/">Inicio<span class="visually-hidden">(Página atual)</span></a>
                 </li>
                 {{#checkUserLevel user.tipoUsuario 1}}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                <li class="nav-item dropdown" >
+                    <a class="nav-link dropdown-toggle navlink-font" href="#" id="navbarDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Pesquisa
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="/questionario/index">Visualizar Pesquisas</a>
+                    <div class="dropdown-menu " aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item " href="/questionario/index">Visualizar Pesquisas</a>
                         <a class="dropdown-item" href="/questionario/indexQuestionariosAtivos">Visualizar Pesquisas
                             Ativas</a>
                         <a class="dropdown-item" href="/questionario/indexQuestionariosInativos">Visualizar Pesquisas
@@ -34,7 +34,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    <a class="nav-link dropdown-toggle navlink-font" href="#" id="navbarDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Usuário
                     </a>
@@ -44,7 +44,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    <a class="nav-link dropdown-toggle navlink-font" href="#" id="navbarDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Cursos
                     </a>
@@ -54,7 +54,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    <a class="nav-link dropdown-toggle navlink-font" href="#" id="navbarDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Disciplinas
                     </a>
@@ -64,7 +64,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    <a class="nav-link dropdown-toggle navlink-font" href="#" id="navbarDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Alunos
                     </a>
@@ -74,7 +74,7 @@
                 </li>
                 {{/checkUserLevel}}
                 <li class="nav-item">
-                    <a class="nav-link" href="/auth/logout">Sair</a>
+                    <a class="nav-link navlink-font" href="/auth/logout">Sair</a>
                 </li>
             </ul>
         </div>
