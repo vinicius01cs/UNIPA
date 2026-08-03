@@ -198,12 +198,4 @@ Ao iniciar pela primeira vez, o sistema detecta a ausência de usuários no banc
 7. **Análise com IA**: O **Coordenador** clica no botão para enviar os dados consolidados do relatório de CPA à Inteligência Artificial (OpenAI), obtendo um feedback detalhado com ações sugeridas baseadas nos dados reais.
 8. **Alinhamento e Ação**: Através do **Chat Integrado**, o **Coordenador** e o **Professor** conversam para estruturar as mudanças propostas pela IA e pelas notas.
 
----
-
-## 📄 Licença
-
-Este projeto está licenciado sob a Licença **MIT** - consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
 *Desenvolvido para modernizar e democratizar o processo de autoavaliação institucional.* 🎓✨
